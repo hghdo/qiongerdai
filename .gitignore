@@ -1,0 +1,13 @@
+nbproject
+nbproject/
+db/schema.rb
+log/
+tmp/
+Gemfile.lock
+public/images/crawl/
+tmp
+public/images/archives/
+public/archives/
+*.swp
+.redcar/
+
