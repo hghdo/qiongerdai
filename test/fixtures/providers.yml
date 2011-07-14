@@ -1,0 +1,19 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  title: MyString
+  url: MyString
+  description: MyString
+  category: 
+  url_filter: MyString
+  fetched_at: 2011-03-13 19:21:13
+  frequence: 1
+
+two:
+  title: MyString
+  url: MyString
+  description: MyString
+  category: 
+  url_filter: MyString
+  fetched_at: 2011-03-13 19:21:13
+  frequence: 1

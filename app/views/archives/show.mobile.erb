@@ -1,0 +1,11 @@
+<p>
+  <b>Title:</b>
+  <%= @archive.title %>
+</p>
+<p>
+  <b>Url:</b>
+  <%= @archive.url %>
+</p>
+<div>
+  <%= (@archive.content.blank? ? @archive.desc : @archive.content).html_safe %>
+</div>

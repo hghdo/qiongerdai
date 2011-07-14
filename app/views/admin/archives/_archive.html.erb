@@ -1,0 +1,22 @@
+<%#
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+%>
+<div class="archive">
+  <div class="main">
+    <h2><%= link_to truncate_u(archive.title,25),admin_archive_path(archive),:title => archive.title  %></h2>
+    <div class="content"><%= archive.desc %></div>
+    <div class="info">
+      <div class="tail"><%= archive.locked? ? "文章已经被锁定(被编辑)" : "" %></div>
+      <p class="tail">
+        <%= link_to "查看文章", archive_path(archive) %>&nbsp;
+      </p>
+    </div>
+  </div>
+  <% unless archive.thumbnail.blank? %>
+  <img src="<%= archive.thumbnail %>" alt="" class="thumbnail"/>
+  <% end %>
+  <p style="clear:both;"></p>
+</div>
+
+

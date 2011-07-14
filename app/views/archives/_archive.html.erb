@@ -1,0 +1,18 @@
+<%#
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+%>
+<div class="archive">
+  <div class="main">
+    <h2><%= link_to truncate_u(archive.title,25),archive,:title => archive.title  %></h2>
+    <div class="content"><%= archive.desc %></div>
+    <div class="info">
+      <div class="tail"><span>关键字: 美容 彩妆</span>&nbsp;<span>来源: 瑞丽美容论坛</span></div>
+      <div class="tail">全文共300字 &nbsp; 被浏览33次，5个推荐</div>
+    </div>
+  </div>
+  <% unless archive.thumbnail.blank? %>
+  <img src="<%= archive.img_url_path(Archive::BIG_THUMB) %>" alt="" class="thumbnail"/>
+  <% end %>
+  <p style="clear:both;"></p>
+</div>

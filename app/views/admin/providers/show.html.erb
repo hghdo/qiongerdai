@@ -1,0 +1,85 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Title:</b>
+  <%= @provider.title %>
+</p>
+
+<p>
+  <b>Url:</b>
+  <%= @provider.url %>
+</p>
+
+<p>
+  <b>Enabled:</b>
+  <%= @provider.enabled %>
+</p>
+
+<p>
+  <b>Full Content:</b>
+  <%= @provider.full_content %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @provider.description %>
+</p>
+
+<p>
+  <b>Category:</b>
+  <%= @provider.category.title %>
+</p>
+
+<p>
+  <b>Encoding:</b>
+  <%= @provider.encoding %>
+</p>
+
+<p>
+  <b>Format:</b>
+  <%= @provider.format %>
+</p>
+
+<p>
+  <b>Structure:</b>
+  <%= @provider.struct %>
+</p>
+
+<p>
+  <b>Max crawl depth:</b>
+  <%= @provider.max_crawl_depth %>
+</p>
+
+<p>
+  <b>Url Pattern for Achive:</b>
+  <%= @provider.archive_url_patterns %>
+</p>
+
+<p>
+  <b>Url Patterns to crawl:</b>
+  <%= @provider.url_patterns_to_follow %>
+</p>
+
+<p>
+  <b>Url Pattern for Skip:</b>
+  <%= @provider.url_patterns_to_skip %>
+</p>
+
+<p>
+  <b>Content XPath:</b>
+  <%= @provider.content_xpath %>
+</p>
+
+<p>
+  <b>Fetched at:</b>
+  <%= @provider.fetched_at %>
+</p>
+
+<p>
+  <b>Frequence:</b>
+  <%= @provider.frequence %>
+</p>
+
+
+<%= link_to 'Edit', edit_admin_provider_path(@provider) %> |
+<%= link_to 'Back', admin_providers_path %>

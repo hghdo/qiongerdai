@@ -1,0 +1,28 @@
+<% content_for :admin_menu do %>
+  <li>
+    <%= link_to "编辑缩略图", thumb_admin_archive_path(@archive) %>
+  </li>
+  <li>
+  <%= link_to "发布这个文章", ok_admin_archive_path(@archive), :method => 'put' %>
+  </li>
+  <li>
+  <%= link_to "删除这篇文章", admin_archive_path(@archive), :method => 'delete' %>
+  </li>
+  <li>
+  <%= link_to "放弃编辑", unlock_admin_archive_path(@archive), :method => 'put' %>
+  </li>
+<% end %>
+
+<h2 id="title"><%= @archive.title %></h2>
+<div>
+  <%= @archive.content.html_safe %>
+</div>
+<h2 id="heading">编辑文章简介</h2>
+<p>
+  <b>Desc:</b>
+  <%= @archive.desc %>
+</p>
+<p>
+  <%= link_to @archive.url %>
+</p>
+<%= link_to "Back to Console", admin_console_path %>

@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<providers type="array">
+  <provider>
+    <full-content type="boolean">true</full-content>
+    <content-xpath>//div[@id='blogcontent'][1]</content-xpath>
+    <created-at type="datetime">2011-03-15T09:04:48Z</created-at>
+    <date-format nil="true"></date-format>
+    <encoding>big5</encoding>
+    <format>html</format>
+    <struct>portal</struct>
+    <search-node-method>xpath</search-node-method>
+    <title>FashionGuide blog</title>
+    <updated-at type="datetime">2011-04-09T12:02:45Z</updated-at>
+    <url-patterns-to-skip>(Sn=(1|3))|(Absolute=([2-9]|\d{2}))</url-patterns-to-skip>
+    <url>http://blog.fashionguide.com.tw/</url>
+    <url-patterns-to-follow>TypeNum=(2|3|5|19)($|&amp;)</url-patterns-to-follow>
+    <enabled type="boolean">false</enabled>
+    <id type="integer">16</id>
+    <rank type="integer" nil="true"></rank>
+    <uid-pattern nil="true"></uid-pattern>
+    <category-id type="integer">2</category-id>
+    <regex-for-scan-pub-date>\d{4}\.\d{1,2}.*</regex-for-scan-pub-date>
+    <archive-url-patterns>blog\.fashionguide\.com\.tw\/BlogD\.asp</archive-url-patterns>
+    <fetched-at type="datetime" nil="true"></fetched-at>
+    <max-crawl-depth type="integer">1</max-crawl-depth>
+    <pub-date-xpath>//div[@id='blog']//div[@class='head']/div[@class='time']</pub-date-xpath>
+    <def-lang nil="true"></def-lang>
+    <description>FashionGuide blog</description>
+    <max-age type="integer">3</max-age>
+    <frequence type="integer" nil="true"></frequence>
+    <min-hit type="integer">50</min-hit>
+  </provider>
+  <provider>
+    <full-content type="boolean">true</full-content>
+    <content-xpath nil="true"></content-xpath>
+    <created-at type="datetime">2011-03-15T09:04:48Z</created-at>
+    <date-format nil="true"></date-format>
+    <encoding nil="true"></encoding>
+    <format>rss</format>
+    <struct nil="true"></struct>
+    <search-node-method nil="true"></search-node-method>
+    <title>ifanr &#25287;&#25351;&#36164;&#35759;&#23567;&#20247;&#35752;&#35770;</title>
+    <updated-at type="datetime">2011-04-02T06:30:19Z</updated-at>
+    <url-patterns-to-skip nil="true"></url-patterns-to-skip>
+    <url>http://www.ifanr.com/feed</url>
+    <url-patterns-to-follow nil="true"></url-patterns-to-follow>
+    <enabled type="boolean">false</enabled>
+    <id type="integer">17</id>
+    <rank type="integer" nil="true"></rank>
+    <uid-pattern nil="true"></uid-pattern>
+    <category-id type="integer">1</category-id>
+    <regex-for-scan-pub-date nil="true"></regex-for-scan-pub-date>
+    <archive-url-patterns nil="true"></archive-url-patterns>
+    <fetched-at type="datetime">2011-04-02T06:30:19Z</fetched-at>
+    <max-crawl-depth type="integer">3</max-crawl-depth>
+    <pub-date-xpath nil="true"></pub-date-xpath>
+    <def-lang nil="true"></def-lang>
+    <description>ifanr &#25287;&#25351;&#36164;&#35759;&#23567;&#20247;&#35752;&#35770;</description>
+    <max-age type="integer">3</max-age>
+    <frequence type="integer" nil="true"></frequence>
+    <min-hit type="integer">50</min-hit>
+  </provider>
+  <provider>
+    <full-content type="boolean">false</full-content>
+    <content-xpath nil="true"></content-xpath>
+    <created-at type="datetime">2011-03-17T14:22:43Z</created-at>
+    <date-format nil="true"></date-format>
+    <encoding nil="true"></encoding>
+    <format>rss</format>
+    <struct nil="true"></struct>
+    <search-node-method nil="true"></search-node-method>
+    <title>Engadget &#20013;&#22269;&#29256;</title>
+    <updated-at type="datetime">2011-04-02T06:30:23Z</updated-at>
+    <url-patterns-to-skip nil="true"></url-patterns-to-skip>
+    <url>http://cn.engadget.com/rss.xml</url>
+    <url-patterns-to-follow nil="true"></url-patterns-to-follow>
+    <enabled type="boolean">false</enabled>
+    <id type="integer">18</id>
+    <rank type="integer" nil="true"></rank>
+    <uid-pattern nil="true"></uid-pattern>
+    <category-id type="integer">1</category-id>
+    <regex-for-scan-pub-date nil="true"></regex-for-scan-pub-date>
+    <archive-url-patterns nil="true"></archive-url-patterns>
+    <fetched-at type="datetime">2011-04-02T06:30:23Z</fetched-at>
+    <max-crawl-depth type="integer">3</max-crawl-depth>
+    <pub-date-xpath nil="true"></pub-date-xpath>
+    <def-lang nil="true"></def-lang>
+    <description>Engadget &#20013;&#22269;&#29256;</description>
+    <max-age type="integer">3</max-age>
+    <frequence type="integer" nil="true"></frequence>
+    <min-hit type="integer">50</min-hit>
+  </provider>
+  <provider>
+    <full-content type="boolean">false</full-content>
+    <content-xpath nil="true"></content-xpath>
+    <created-at type="datetime">2011-03-17T14:48:21Z</created-at>
+    <date-format nil="true"></date-format>
+    <encoding nil="true"></encoding>
+    <format>rss</format>
+    <struct nil="true"></struct>
+    <search-node-method nil="true"></search-node-method>
+    <title>&#23041;&#38155;&#32593;&#26032;&#38395;</title>
+    <updated-at type="datetime">2011-03-23T14:48:46Z</updated-at>
+    <url-patterns-to-skip nil="true"></url-patterns-to-skip>
+    <url>http://news.weiphone.com/rss.xml</url>
+    <url-patterns-to-follow nil="true"></url-patterns-to-follow>
+    <enabled type="boolean">false</enabled>
+    <id type="integer">19</id>
+    <rank type="integer" nil="true"></rank>
+    <uid-pattern nil="true"></uid-pattern>
+    <category-id type="integer">1</category-id>
+    <regex-for-scan-pub-date nil="true"></regex-for-scan-pub-date>
+    <archive-url-patterns nil="true"></archive-url-patterns>
+    <fetched-at type="datetime">2011-03-22T15:34:22Z</fetched-at>
+    <max-crawl-depth type="integer">3</max-crawl-depth>
+    <pub-date-xpath nil="true"></pub-date-xpath>
+    <def-lang nil="true"></def-lang>
+    <description>&#23041;&#38155;&#32593;&#26032;&#38395;</description>
+    <max-age type="integer">3</max-age>
+    <frequence type="integer" nil="true"></frequence>
+    <min-hit type="integer">50</min-hit>
+  </provider>
+  <provider>
+    <full-content type="boolean">false</full-content>
+    <content-xpath nil="true"></content-xpath>
+    <created-at type="datetime">2011-03-17T14:50:32Z</created-at>
+    <date-format nil="true"></date-format>
+    <encoding nil="true"></encoding>
+    <format>rss</format>
+    <struct nil="true"></struct>
+    <search-node-method nil="true"></search-node-method>
+    <title>&#23041;&#38155;&#32593;&#36719;&#20214;&#35780;&#27979;</title>
+    <updated-at type="datetime">2011-03-23T14:48:57Z</updated-at>
+    <url-patterns-to-skip nil="true"></url-patterns-to-skip>
+    <url>http://lab.weiphone.com/rss.xml</url>
+    <url-patterns-to-follow nil="true"></url-patterns-to-follow>
+    <enabled type="boolean">false</enabled>
+    <id type="integer">20</id>
+    <rank type="integer" nil="true"></rank>
+    <uid-pattern nil="true"></uid-pattern>
+    <category-id type="integer">1</category-id>
+    <regex-for-scan-pub-date nil="true"></regex-for-scan-pub-date>
+    <archive-url-patterns nil="true"></archive-url-patterns>
+    <fetched-at type="datetime">2011-03-22T15:34:22Z</fetched-at>
+    <max-crawl-depth type="integer">3</max-crawl-depth>
+    <pub-date-xpath nil="true"></pub-date-xpath>
+    <def-lang nil="true"></def-lang>
+    <description>&#23041;&#38155;&#32593;&#36719;&#20214;&#35780;&#27979;</description>
+    <max-age type="integer">3</max-age>
+    <frequence type="integer" nil="true"></frequence>
+    <min-hit type="integer">50</min-hit>
+  </provider>
+  <provider>
+    <full-content type="boolean">true</full-content>
+    <content-xpath nil="true"></content-xpath>
+    <created-at type="datetime">2011-03-25T07:15:00Z</created-at>
+    <date-format nil="true"></date-format>
+    <encoding nil="true"></encoding>
+    <format>rss</format>
+    <struct nil="true"></struct>
+    <search-node-method nil="true"></search-node-method>
+    <title>AppsKu</title>
+    <updated-at type="datetime">2011-04-02T06:32:49Z</updated-at>
+    <url-patterns-to-skip nil="true"></url-patterns-to-skip>
+    <url>http://appsku.com/feed/</url>
+    <url-patterns-to-follow nil="true"></url-patterns-to-follow>
+    <enabled type="boolean">false</enabled>
+    <id type="integer">21</id>
+    <rank type="integer" nil="true"></rank>
+    <uid-pattern nil="true"></uid-pattern>
+    <category-id type="integer">1</category-id>
+    <regex-for-scan-pub-date nil="true"></regex-for-scan-pub-date>
+    <archive-url-patterns nil="true"></archive-url-patterns>
+    <fetched-at type="datetime">2011-04-02T06:30:27Z</fetched-at>
+    <max-crawl-depth type="integer">3</max-crawl-depth>
+    <pub-date-xpath nil="true"></pub-date-xpath>
+    <def-lang nil="true"></def-lang>
+    <description>AppsKu</description>
+    <max-age type="integer">3</max-age>
+    <frequence type="integer" nil="true"></frequence>
+    <min-hit type="integer">50</min-hit>
+  </provider>
+  <provider>
+    <full-content type="boolean">true</full-content>
+    <content-xpath>div.postmessage</content-xpath>
+    <created-at type="datetime">2011-04-02T06:32:18Z</created-at>
+    <date-format></date-format>
+    <encoding>gbk</encoding>
+    <format>html</format>
+    <struct>bbs</struct>
+    <search-node-method>css</search-node-method>
+    <title>&#29790;&#20029;&#32654;&#23481;&#25252;&#32932;</title>
+    <updated-at type="datetime">2011-04-18T08:28:17Z</updated-at>
+    <url-patterns-to-skip></url-patterns-to-skip>
+    <url>http://bbs.rayli.com.cn/forum-19-1.html</url>
+    <url-patterns-to-follow>forum-19-[12345]\.html$
+thread-\d{8,}-1-1\.html$
+viewthread\.php\?tid=\d{8,}&amp;page=1&amp;authorid=\d{3,}$</url-patterns-to-follow>
+    <enabled type="boolean">true</enabled>
+    <id type="integer">22</id>
+    <rank type="integer" nil="true"></rank>
+    <uid-pattern></uid-pattern>
+    <category-id type="integer">2</category-id>
+    <regex-for-scan-pub-date>\d{4}-\d{1,2}.*</regex-for-scan-pub-date>
+    <archive-url-patterns>viewthread\.php\?tid=\d{8,}&amp;page=1&amp;authorid=\d{3,}$</archive-url-patterns>
+    <fetched-at type="datetime">2011-04-18T08:28:17Z</fetched-at>
+    <max-crawl-depth type="integer">3</max-crawl-depth>
+    <pub-date-xpath>//div[@class='authorinfo']/em</pub-date-xpath>
+    <def-lang nil="true"></def-lang>
+    <description>&#29790;&#20029;&#32654;&#23481;&#25252;&#32932;</description>
+    <max-age type="integer">3</max-age>
+    <frequence type="integer" nil="true"></frequence>
+    <min-hit type="integer">50</min-hit>
+  </provider>
+  <provider>
+    <full-content type="boolean">true</full-content>
+    <content-xpath>div.mybbs_cont &gt; div.cont</content-xpath>
+    <created-at type="datetime">2011-04-07T15:54:36Z</created-at>
+    <date-format></date-format>
+    <encoding>gb2312</encoding>
+    <format>html</format>
+    <struct>bbs</struct>
+    <search-node-method>css</search-node-method>
+    <title>sina &#32654;&#23481;&#35770;&#22363;</title>
+    <updated-at type="datetime">2011-04-18T08:28:23Z</updated-at>
+    <url-patterns-to-skip></url-patterns-to-skip>
+    <url>http://club.eladies.sina.com.cn/forum-2-1.html</url>
+    <url-patterns-to-follow>forum-2-[12345]\.html$
+thread-\d{5,}-1-1\.html$
+viewthread\.php\?tid=\d{5,}&amp;page=1&amp;authorid=\d{3,}$</url-patterns-to-follow>
+    <enabled type="boolean">true</enabled>
+    <id type="integer">23</id>
+    <rank type="integer" nil="true"></rank>
+    <uid-pattern></uid-pattern>
+    <category-id type="integer">2</category-id>
+    <regex-for-scan-pub-date>\d{4}-\d{1,2}.*</regex-for-scan-pub-date>
+    <archive-url-patterns>viewthread\.php\?tid=\d{5,}&amp;page=1&amp;authorid=\d{3,}$</archive-url-patterns>
+    <fetched-at type="datetime">2011-04-18T08:28:23Z</fetched-at>
+    <max-crawl-depth type="integer">2</max-crawl-depth>
+    <pub-date-xpath>//div[@class='myInfo_up']/font</pub-date-xpath>
+    <def-lang nil="true"></def-lang>
+    <description></description>
+    <max-age type="integer">2</max-age>
+    <frequence type="integer" nil="true"></frequence>
+    <min-hit type="integer">500</min-hit>
+  </provider>
+  <provider>
+    <full-content type="boolean">true</full-content>
+    <content-xpath>//div[@id='blogcontent'][1]</content-xpath>
+    <created-at type="datetime">2011-04-09T12:02:29Z</created-at>
+    <date-format></date-format>
+    <encoding>big5</encoding>
+    <format>html</format>
+    <struct>portal</struct>
+    <search-node-method>xpath</search-node-method>
+    <title>FG &#37096;&#33853;&#26684;</title>
+    <updated-at type="datetime">2011-04-18T07:09:12Z</updated-at>
+    <url-patterns-to-skip>from=newtop</url-patterns-to-skip>
+    <url>http://blog.fashionguide.com.tw/</url>
+    <url-patterns-to-follow>^http://blog\.fashionguide\.com\.tw/$
+TypeNum=(2|3|5|19).*(&amp;Absolute=2)?</url-patterns-to-follow>
+    <enabled type="boolean">true</enabled>
+    <id type="integer">24</id>
+    <rank type="integer" nil="true"></rank>
+    <uid-pattern>Num=\d{5,}</uid-pattern>
+    <category-id type="integer">2</category-id>
+    <regex-for-scan-pub-date>\d{4}\.\d{1,2}.*</regex-for-scan-pub-date>
+    <archive-url-patterns>blog\.fashionguide\.com\.tw\/BlogD\.asp</archive-url-patterns>
+    <fetched-at type="datetime">2011-04-18T07:09:12Z</fetched-at>
+    <max-crawl-depth type="integer">3</max-crawl-depth>
+    <pub-date-xpath>//div[@id='blog']//div[@class='head']/div[@class='time']</pub-date-xpath>
+    <def-lang nil="true"></def-lang>
+    <description>FG &#37096;&#33853;&#26684;</description>
+    <max-age type="integer">3</max-age>
+    <frequence type="integer" nil="true"></frequence>
+    <min-hit type="integer">50</min-hit>
+  </provider>
+</providers>

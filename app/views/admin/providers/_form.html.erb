@@ -1,0 +1,140 @@
+<%= form_for([:admin,@provider]) do |f| %>
+  <% if @provider.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@provider.errors.count, "error") %> prohibited this provider from being saved:</h2>
+
+      <ul>
+      <% @provider.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <table>
+    <tr>
+      <td><%= f.label :title %></td>
+      <td><%= f.text_field :title %></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><%= f.label :url %></td>
+      <td><%= f.text_field :url %></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><%= f.label :description %></td>
+      <td><%= f.text_field :description %></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><%= f.label :enabled %></td>
+      <td><%= f.check_box :enabled %></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><%= f.label :category %></td>
+      <td><%= f.select :category_id,Category.find(:all).collect{|b| [b.title,b.id]},{},:html => {} %></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><%= f.label :max_crawl_depth %></td>
+      <td><%= f.select :max_crawl_depth,(1..5),{},:html => {} %></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><%= f.label :encoding %></td>
+      <td><%= f.text_field :encoding %></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><%= f.label :format %></td>
+      <td><%= f.select :format,provider_formats,{},:html => {} %></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><%= f.label :struct %></td>
+      <td><%= f.select :struct,provider_web_struct,{:include_blank => true},:html => {} %></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><%= f.label :min_hit %></td>
+      <td><%= f.text_field :min_hit %></td>
+      <td>For bbs structure only</td>
+    </tr>
+    <tr>
+      <td><%= f.label :max_age %></td>
+      <td><%= f.text_field :max_age %></td>
+      <td>For bbs structure only</td>
+    </tr>
+    <tr>
+      <td><%= f.label :full_content %></td>
+      <td><%= f.check_box :full_content %></td>
+      <td>For rss format only</td>
+    </tr>
+    <tr>
+      <td><%= f.label :frequence %></td>
+      <td><%= f.text_field :frequence %></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><%= f.label :archive_url_patterns %></td>
+      <td><%= f.text_area :archive_url_patterns,:cols => 60,:rows => 4 %></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><%= f.label :url_patterns_to_follow %></td>
+      <td><%= f.text_area :url_patterns_to_follow, :cols => 60,:rows => 4 %></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><%= f.label :url_patterns_to_skip %></td>
+      <td><%= f.text_area :url_patterns_to_skip, :cols => 60,:rows => 4 %></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><%= f.label :uid_pattern %></td>
+      <td><%= f.text_field :uid_pattern %></td>
+      <td><span>(Used to extract another unique id from archive url)</span></td>
+    </tr>
+    <tr>
+      <td><%= f.label :content_xpath %></td>
+      <td><%= f.text_field :content_xpath %></td>
+      <td>Content path in xpath or css</td>
+    </tr>
+    <tr>
+      <td><%= f.label :search_node_method %></td>
+      <td><%= f.text_field :search_node_method %></td>
+      <td>search content node method: xpath/css</td>
+    </tr>
+    <tr>
+      <td><%= f.label :pub_date_xpath %></td>
+      <td><%= f.text_field :pub_date_xpath %></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><%= f.label :regex_for_scan_pub_date %></td>
+      <td><%= f.text_field :regex_for_scan_pub_date %></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><%= f.label :date_format %></td>
+      <td><%= f.text_field :date_format %></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+
+<% end %>

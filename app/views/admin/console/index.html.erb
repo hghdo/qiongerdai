@@ -1,0 +1,15 @@
+<%#
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+%>
+
+<h2 class="admin-subtitle"><%= @unverified_count %> 篇文章等待被验证.</h2>
+<%= link_to "验证一篇文章", allocate_admin_archives_path, :method => 'put' %><br/>
+<h2 class="admin-subtitle"><%= @locked_count %> 篇文章正在被验证(已经被锁定).</h2>
+<%= link_to "查看被锁定的文章", admin_archives_path(:status => Archive::LOCKED) %><br/>
+<!--
+<%= link_to 'Manage Category', admin_categories_path %><br/>
+<%= link_to 'Manage Thing',admin_things_path %><br/>
+<%= link_to 'Manage Provider',admin_providers_path %><br/>
+-->
+

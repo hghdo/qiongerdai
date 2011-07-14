@@ -1,0 +1,5 @@
+<%= paginate @archives %>
+<% @archives.each do |archive| %>
+  <%= render :partial => 'archives/archive',:object => archive %>
+<% end %>
+<%= paginate @archives %>

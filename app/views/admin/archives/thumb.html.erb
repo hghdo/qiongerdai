@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit thumbnail image</title>
+  <%= javascript_include_tag "Jcrop/js/jquery.min.js","Jcrop/js/jquery.Jcrop.min.js" %>
+  <%= stylesheet_link_tag "/javascripts/Jcrop/css/jquery.Jcrop.css" %>
+</head>
+<body>
+  <div class="section header">
+<ul>
+  <% for img in @images %>
+    <li style="display:inline">
+      <a href="<%= thumb_admin_archive_path(@archive, :source => img) %>">
+      <%= image_tag @archive.img_url_path(img), :style => "max-width:150px;"  %>
+      </a>
+    </li>
+  <% end %>
+</ul>
+
+ </div>
+  <div class="section">
+    <div id="crop_container">
+      <script type="text/javascript" charset="utf-8">
+        $(window).load(function(){
+          var crop=$.Jcrop('#thumb',{aspectRatio: 1,bgOpacity:.4,onChange: setValue,minSize : [96,96]});
+          
+          var dim=crop.getBounds();
+          //crop.setSelect([dim[0]/2-40,80,dim[1]/2,80]);
+          $('#reset_o').click(function(e) {
+            crop.animateTo([dim[0]/2-40,80,dim[1]/2,80]);
+          });
+          function setValue(c)
+          {
+            $('#x1').val(c.x);
+            $('#y1').val(c.y);
+            $('#w').val(c.w);
+            $('#h').val(c.h);
+          }
+          setValue(crop.tellScaled());
+
+        });
+      </script>
+      <div class="msg"><p class="info">拖拽选框和改变选框的大小，剪切出美丽的大头像！&nbsp;</p></div>
+      <div>
+        <%= image_tag @source, :id => "thumb", :name => "thumb"  %>
+      </div>
+      <% form_tag(crop_admin_archive_path(@archive),:method => :put) do %>
+        <div class="hidden">
+          <input type="text" name="head" value="true">
+          <input type="text" name="x1" id="x1" />
+          <input type="text" name="y1" id="y1" />
+          <input type="text" name="width" id="w" />
+          <input type="text" name="height" id="h" />
+          <input type="hidden" name="source" value="<%= @source %>"/>
+        </div><p class="h20"></p>
+        <p class="center"><%= submit_tag '就这样了，剪裁吧！',:class=>"l-long-btn" %></p>
+      <% end %>
+    </div>
+
+  </div>
+</body>
+</html>

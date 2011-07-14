@@ -1,0 +1,18 @@
+<p id="notice"><%= notice %></p>
+<div class="archive">
+  <h1><%= @archive.title %></h1> 
+  <div>
+    <%= (@archive.content.blank? ? @archive.desc : @archive.content).html_safe %>
+  </div>
+</div>
+<p>
+  <b>Title:</b>
+  <%= @archive.title %>
+</p>
+<p>
+  <b>Url:</b>
+  <%= @archive.url %>
+</p>
+
+<%= link_to 'Edit', edit_archive_path(@archive) %> |
+<%= link_to 'Back', archives_path %>

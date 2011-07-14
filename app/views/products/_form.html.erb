@@ -1,0 +1,126 @@
+<%= form_for(@product) do |f| %>
+  <% if @product.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@product.errors.count, "error") %> prohibited this product from being saved:</h2>
+
+      <ul>
+      <% @product.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <span><%= f.label "选择品牌" %></span>
+    <span>或直接输入品牌</span>
+    <span>
+      <%= text_field(:brand,:title, :size => 15) %>
+      <%= f.hidden_field :brand_id %>
+    </span>
+    <ul class="tags">
+      <% for bb in Brand.all %>
+        <li><a href="javascript:selectBrand(<%= bb.id %>)" id="brand_<%= bb.id %>"><%= bb.title %></a></li>
+      <% end %>
+    </ul>
+  </div>
+  <div class="field">
+    <span><%= f.label "选择分类" %></span>
+    <span>或直接输入分类</span>
+    <span>
+      <%= text_field :thing, :title, :size => 15 %>
+      <%= f.hidden_field :thing_id %>
+    </span>
+    <ul class="tags">
+      <% for tt in Thing.all %>
+        <li><a href="javascript:selectThing(<%= tt.id %>)" id="thing_<%= tt.id %>"><%= tt.title %></a></li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="field">
+    <span><%= f.label "宝贝名" %></span>
+    <%= f.text_field :name %>
+  </div>
+<!--
+  <div class="field">
+    <%= f.label :subname %><br />
+    <%= f.text_field :subname %>
+  </div>
+-->
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+<script type="text/javascript">
+  function selectBrand(brandId){
+    bt=$("#brand_"+brandId).html();
+    $("#brand_title").val(bt);
+  }
+  function selectThing(thingId){
+    bt=$("#thing_"+thingId).html();
+    $("#thing_title").val(bt);
+  }
+
+(function($){
+    $(document).ready(function()
+	{
+	});
+
+    // Replace the following string with the AppId you received from the
+    // Bing Developer Center.
+    var AppId = "AppId=FC89412B5FAD6498A3CAE93F166F724D425812B9";
+    var Query = "Query="
+    var Sources = "Sources=Image";
+    var Version = "Version=2.0";
+    var Options = "Options=EnableHighlighting";
+    var WebCount = 10;
+    var WebOffset = 0;
+
+
+    Search= function(txtToSearch, img_id) {
+		escapedTxt =  txtToSearch.replace(/[^a-zA-Z 0-9]+/g,'');
+        var searchTerms = escapedTxt.replace(" ", "+");
+        var arr = [AppId, Query + searchTerms, Sources, Version, Options, "Web.Count=" + WebCount, "Web.Offset=" + WebOffset, "JsonType=callback", "JsonCallback=?"];
+        var requestStr = "http://api.search.live.net/json.aspx?" + arr.join("&");
+
+        $.ajax({
+            type: "GET",
+            url: requestStr,
+            dataType: "jsonp",
+            success: function(msg) {
+                SearchCompleted(msg, img_id);
+            },
+            error: function(msg) {
+                alert("Something hasn't worked\n" + msg.d);
+            }
+        });
+    }
+
+    function SearchCompleted(response, img_id) {
+
+        var errors = response.SearchResponse.Errors;
+        if (errors != null) {
+            // There are errors in the response. Display error details.
+            DisplayErrors(errors);
+        }
+        else {
+            // There were no errors in the response. Display the Web results.
+            DisplayResults(response, img_id);
+        }
+    }
+
+    function DisplayResults(response, img_id) {
+		$("#"+img_id).attr("src", response.SearchResponse.Image.Results[0].MediaUrl);
+    }
+
+    function DisplayErrors(errors) {
+        var errorHtml = [];
+
+        for (var i = 0; i < errors.length; ++i) {
+            errorHtml[i] = "<li>" + errors[i] + "</li>";
+        }
+        $('#error-list').append(errorHtml.join(''));
+    }
+})(jQuery);
+</script>

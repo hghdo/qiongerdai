@@ -1,0 +1,12 @@
+<!--
+<h2 class="admin-heading">
+<%= link_to "等待验证的", admin_archives_path(:status => Archive::SYNCED) %>
+<%= link_to "已经被锁定的", admin_archives_path(:status => Archive::LOCKED) %>
+<%= link_to "验证通过的", admin_archives_path(:status => Archive::OK) %>
+</h2>
+-->
+<%= paginate @archives %>
+<% @archives.each do |archive| %>
+  <%= render archive %>
+<% end %>
+

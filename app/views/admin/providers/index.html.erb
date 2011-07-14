@@ -1,0 +1,45 @@
+<h1>Listing providers</h1>
+
+<table class="list">
+  <tr>
+    <th>Title</th>
+    <th>Category</th>
+    <th>Format</th>
+    <th>Structure</th>
+    <th>Encoding</th>
+    <th>Full Content</th>
+    <th>Enabled</th>
+    <th>Fetched at</th>
+    <!--
+    <th>Url</th>
+    <th>max_crawl_depth</th>
+    <th>Url Pattern for Archives</th>
+    <th>Content XPath</th>
+    <th>Fetched at</th>
+    <th>Frequence</th>
+    -->
+    <th></th>
+  </tr>
+
+<% @providers.each do |provider| %>
+  <tr>
+    <td><%= provider.title %></td>
+    <td><%= provider.category.title %></td>
+    <td><%= provider.format %></td>
+    <td><%= provider.struct %></td>
+    <td><%= provider.encoding %></td>
+    <td><%= provider.full_content %></td>
+    <td><%= provider.enabled %></td>
+    <td><%= provider.fetched_at %></td>
+    <td>
+      <%= link_to 'Show', [:admin,provider] %>&nbsp;
+      <%= link_to 'Edit', edit_admin_provider_path(provider) %>&nbsp;
+      <%= link_to 'Destroy', [:admin,provider], :confirm => 'Are you sure?', :method => :delete %>
+    </td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Provider', new_admin_provider_path %>

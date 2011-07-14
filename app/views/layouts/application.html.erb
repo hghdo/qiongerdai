@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Qiongerdai</title>
+  <%= stylesheet_link_tag :all %>
+  <%= javascript_include_tag :defaults %>
+  <%= csrf_meta_tag %>
+</head>
+<body>
+  <div class="wrapper section header">
+    <ul id="navigation">
+      <li><%= link_to '美丽日志',root_path %></li>
+      <li><%= link_to '百宝箱',root_path %></li>
+      <li><%= link_to '宝贝签到', new_product_path %></li>
+      <li><%= link_to 'admin',admin_console_path %></li>
+    </ul>
+  </div>
+  <div class="wrapper">
+    <div id="main">
+    <div class="section">
+    <%= yield %>
+    </div>
+    </div>
+    <div id="side">
+      <ul class="tops">
+        <% for ha in @hot_archives %>
+          <li><%= link_to truncate_u(ha.title,15), ha, :title => ha.title %></li>
+        <% end %>
+      </ul>
+    </div>
+    <p class="clear"></p>
+  </div>
+</body>
+</html>

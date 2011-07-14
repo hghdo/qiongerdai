@@ -1,0 +1,10 @@
+<ul>
+  <% for archive in @archives %>
+    <li >
+      <%= image_tag archive.thumbnail,:width => 48 %>
+      <%= link_to archive.title.truncate(20), archive %>
+      <small class="counter"></small>
+    </li>
+  <% end %>
+</ul>
+

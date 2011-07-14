@@ -1,0 +1,11 @@
+Add web page to let admin audit the archive.
+Add web page to let admin select/crop a image as thumbnail. Add code to resize thumbnail to smaller size. 
+Generate Rss xml from web base server.
+Add simple authentication code for all controller under admin folder.
+Design web page to a standard style.
+Change main navigation, remove unrelated items.
+=========================
+New tasks
+Administartor can edit archive title and description
+Generate offline html document for client and zip it into pkg with images
+
