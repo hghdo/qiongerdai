@@ -1,5 +1,6 @@
 class Admin::ArchivesController < Admin::ConsoleController
 
+  before_filter :authorized?, :except => :create
   before_filter :load_archive, :except => [:index,:create,:new,:allocate]
   # GET /archives
   # GET /archives.xml

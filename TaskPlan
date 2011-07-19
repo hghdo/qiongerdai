@@ -1,11 +1,21 @@
-Add web page to let admin audit the archive.
-Add web page to let admin select/crop a image as thumbnail. Add code to resize thumbnail to smaller size. 
-Generate Rss xml from web base server.
-Add simple authentication code for all controller under admin folder.
-Design web page to a standard style.
-Change main navigation, remove unrelated items.
+Add web page to let admin audit the archive. Finished
+Add web page to let admin select/crop a image as thumbnail. Add code to resize thumbnail to smaller size. Finished
+Generate Rss xml from web base server. Finished
+Add simple authentication code for all controller under admin folder. Finished
+Design web page to a standard style. Finished
+Change main navigation, remove unrelated items. Finished
+Generate offline html document for client and zip it into pkg with images. Finished
 =========================
 New tasks
-Administartor can edit archive title and description
-Generate offline html document for client and zip it into pkg with images
+Cache the RSS xml, updated the RSS each hour.
+Record each RSS feed request from mobile client for analyse.
+Administartor can edit archive title and description.
+
+
+=========================
+Thinking of the architecture:
+1) For all provider/source, the first page may has already has enough content. If it was true then the crawl logic could be very simple. Just crawl the pages that matchs some pattern.
+2) Two kind of web server, crawl server and public server. Crawl server has source informations and crawl pages, also provide interfact to let administrator edit archives and upload verified content to public server.
+3) Content in public server is independent from the crawl server. Means when archive uploaded to public server new 'id' will generated. But there should be a unique guid for each archive. The guid could be digest of the archive content or others. 
+4) Generalize the crawler code to abstract the actions. For each source write a child crawler that derived from the general crawler.
 

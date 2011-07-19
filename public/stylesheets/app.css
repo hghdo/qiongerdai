@@ -22,6 +22,7 @@ h2{font-size:16px;line-height:24px;padding:0;margin:0;}
 .clear{clear:both;}
 .section{}
 .tops{font-size:12px;}
+.header{padding:10px 0;}
 
 .archive{position:relative;margin:0 0 40px 0;}
 .archive .main{margin-right:140px;}
@@ -44,6 +45,10 @@ img.autosize{max-width:98%;}
 
 ul.tags{list-style:none;list-style-type:none;}
 ul.tags li{display:inline;padding:2px;}
+
+
+.edit-table{border:1px solid #ccc;border-collapse:collapse;}
+.edit-table td{border:1px solid #ccc;}
 
 
 

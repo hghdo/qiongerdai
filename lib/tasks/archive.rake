@@ -12,7 +12,7 @@ namespace :archive do
 
   desc "upload analyzed file to web server along with a zip file including all related images"
   task :upload => :environment do
-    web_server="http://ec2-175-41-222-40.ap-northeast-1.compute.amazonaws.com/admin/archives"
+    web_server="http://ec2-46-51-247-113.ap-northeast-1.compute.amazonaws.com/admin/archives"
     #web_server="http://www.zadui.cn/admin/archives"
     #server_url=URI(web_server)
     #http=Net::HTTP.new(server_url.host,server_url.port)

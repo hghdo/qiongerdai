@@ -1,5 +1,5 @@
 class Admin::ConsoleController < ApplicationController
-  before_filter :authorized?
+  before_filter :authorized?, :except => :create
   layout 'console'
   def index
     @unverified_count=Archive.where("status=?",Archive::SYNCED).count
