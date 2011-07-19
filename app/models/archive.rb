@@ -130,6 +130,7 @@ class Archive < ActiveRecord::Base
           pi['class']='autosize'
           # remove image hardcode size attribute. 
           %w{width height style onmouseover onclick}.each{|att| pi.remove_attribute att}
+          # FIXME Should create small size image as well. 
           ImageScience.with_image(iwp){|thisimg| thumbnail_url=img_url_in_archive if thisimg.width>150} if thumbnail_url.blank?
         rescue Exception => e
           puts "Error occurred when crawl images => #{e}"
