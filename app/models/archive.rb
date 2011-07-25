@@ -9,13 +9,14 @@ class Archive < ActiveRecord::Base
   SMALL_THUMB='thumb96'
   BIG_THUMB='thumb150'
   # Archive status
-  # new => analyzed => synced => locked(verifying by admin) <=> ok(published) => deleted(ignored)
+  # new => analyzed => synced => locked(verifying by some admin) <=> ok(published) => deleted(ignored)
+  DELETED=-1
   NEW=0
   ANALYZED=1
   SYNCED=2
   LOCKED=3
   OK=4
-  DELETED=5
+  
 
 #  before_create :extract_thumbnail
   before_save :check_pub_date
@@ -45,7 +46,7 @@ class Archive < ActiveRecord::Base
       html.puts('<?xml version="1.0" encoding="UTF-8"?>')
       html.puts('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN" "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">')
       html.puts('<html><head>')
-      html.puts('<title>Q&A for Mobile</title>')
+      html.puts('<title></title>')
       html.puts('<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">')
       html.puts('<style type="text/css">.autosize{max-width:100%;}</style>')
       html.puts('</head>')

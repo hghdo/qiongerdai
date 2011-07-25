@@ -4,7 +4,7 @@ module Crawl
       [
         #
         {:name => 'FGBlog',
-         :enabled => true,
+         :enabled => false,
          :analyser => 'GeneralAnalyser',
          :entrances => [
             "http://blog.fashionguide.com.tw/",
@@ -14,7 +14,7 @@ module Crawl
             "http://blog.fashionguide.com.tw/index.asp?TypeNum=19",
             ],
           :archive_patterns => [/blog\.fashionguide\.com\.tw\/BlogD\.asp/,],
-          :unique_id_pattern => /Num=\d{5,}/,
+          :unique_id_pattern => /Num=(\d{5,})/,
           :content_path_expression => "//div[@id='blogcontent'][1]",
           :pub_date_xpath => "//div[@id='blog']//div[@class='head']/div[@class='time']", 
           :pub_date_css => "div#blog div.head>div.time", 
@@ -24,7 +24,7 @@ module Crawl
         }, 
         # 
         { :name => 'rayliForum',
-          :enabled => false,
+          :enabled => true,
           :analyser => 'ForumAnalyser',
           :entrances => [
             "http://bbs.rayli.com.cn/forum-19-1.html",
@@ -36,17 +36,17 @@ module Crawl
           :author_id_url_in_thread_list_xpath => "tr/td[@class='by']/cite/a",
           :author_id_scan_pattern => /uid-(\d+)\.html/,
           :wrote_date_in_thread_list_xpath => "tr/td[@class='by']/em",
-          :hit_count_in_thread_list_xpath => "tr/td[@class='nums']/em",
-          :link_template => "http://bbs.rayli.com.cn/forum-viewthread-tid-#THRID#-page-1-authorid-#AUTHID#.html"        
+          :hit_count_in_thread_list_xpath => "tr/td[@class='num']/em",
+          :link_template => "http://bbs.rayli.com.cn/forum-viewthread-tid-#THRID#-page-1-authorid-#AUTHID#.html",        
           :content_path_expression => "//div[@class='t_fsz']",
           :search_content_node_method => 'xpath',
           :pub_date_css => "div.pi>div.pti>div.authi em", 
           :pub_date_pattern => /\s(\d{4}-.+)/,
           #:archive_patterns => [/viewthread\.php\?tid=\d{5,}&page=1&authorid=\d{3,}$/,],
-          #:unique_id_pattern => /Num=\d{5,}/,
+          :unique_id_pattern => /tid-(\d+)-/,
           :charset => 'gbk',
           :max_age => 3,       
-          :min_hit => 100, 
+          :min_hit => 10, 
           :min_reply => 10, 
           
         }, 

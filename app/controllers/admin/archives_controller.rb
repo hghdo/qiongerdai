@@ -7,6 +7,7 @@ class Admin::ArchivesController < Admin::ConsoleController
   def index
     @title="文章列表"
     status=params[:status].blank? ? Archive::SYNCED : (params[:status].to_i rescue Archive::SYNCED)
+    puts "AAAAAAAAAAAAAA=> #{status}"
     @archives = Archive.where(["status=?",status]).order("created_at desc").page(params[:page]).per(15)
     respond_to do |format|
       format.html # index.html.erb

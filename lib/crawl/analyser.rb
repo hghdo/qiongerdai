@@ -1,4 +1,5 @@
 require 'nokogiri'
+require 'time'
 
 #module Crawl
   
@@ -20,7 +21,8 @@ require 'nokogiri'
     # Extract content from html, and save the content to db.
     def extract_content(page)
       # calculate archive unique id
-      uid=page.url.to_s.scan(@source[:unique_id_pattern])[0] rescue page.url.to_s
+      uid=page.url.to_s.scan(@source[:unique_id_pattern])[0][0] rescue page.url.to_s
+      uid=@source[:name]+"-"+uid
       # Check whether this archive is already existed in db.
       
       # Get title
@@ -29,20 +31,21 @@ require 'nokogiri'
       content_node_set=fetch_content_nodes(page)
       return nil if title.blank? || content_node_set.size<1
       # filter old archives
-      pub_time=fetch_pub_time(page)
-      return nil if pub_time.nil? || pub_time+@source[:max_age].day<Time.now
+      pub_time=fetch_pub_time(page) 
+      #puts "Pub time is=> #{pub_time}"
+      return nil if pub_time.nil? || (pub_time+(@source[:max_age].days))<Time.now
       # do some extra work if needed
-      extra_work(content_node_set) if self.respond_to?('extra_work')
-      
+      extra_work(content_node_set) if self.respond_to?(:extra_work)
+      # get document META info
       desc_meta=page.doc.xpath("//meta[@name='description']")[0]
       keywords_meta=page.doc.xpath("//meta[@name='keywords']")[0]
       analyzed_page={
         :title => title, :url => page.url.to_s, :uid => uid, 
-        :put_date => pub_time, 
+        :pub_date => pub_time, 
         :desc => desc_meta.blank? ? '' : desc_meta['content'],
         :keywords => keywords_meta.blank? ? '' : keywords_meta['content'],
         :content => content_node_set.inject(''){|c,i|c+=i.to_html(:encoding => 'utf-8')} ,
-      }       
+      }  
       yield analyzed_page if block_given?
     end
     
@@ -52,8 +55,10 @@ require 'nokogiri'
     end
     
     def fetch_pub_time(page)
+      #puts "pub date css => #{@source[:pub_date_css]}"
       pub_date_node=page.doc.at_css(@source[:pub_date_css])
-      pub_time=DateTime.parse(pub_date_node.content.scan(@source[:pub_date_pattern])[0]) rescue nil
+      #puts "pub date string is => #{pub_date_node.content.scan(@source[:pub_date_pattern])[0][0]}"
+      Time.parse(pub_date_node.content.scan(@source[:pub_date_pattern])[0][0]) rescue nil
     end
 
     #
@@ -87,11 +92,13 @@ require 'nokogiri'
       threadlist=page.doc.xpath(@source[:thread_list_xpath])
       threadlist.each do |thr|
         next if top?(thr)
+        next if split?(thr)
         next if old?(thr)
         next if !hot?(thr)
         link=@source[:link_template].sub(/#THRID#/,thread_id(thr)).sub(/#AUTHID#/,author_id(thr)) rescue nil
         links << link if not link.nil?
       end
+      links
     end
     
     def author_id(node)
@@ -104,20 +111,23 @@ require 'nokogiri'
       node["id"]=~/^stickthread/
     end
     
+    def split?(node)
+      node[:id].nil?
+    end
+    
     def old?(node)
-      wrote_date=DateTime.parse(node.xpath(@source[:wrote_date_in_thread_list_xpath])[0].content) rescue nil
-      wrote_date + 3.day > Time.now
+      wrote_date=Time.parse(node.xpath(@source[:wrote_date_in_thread_list_xpath])[0].content) rescue nil
+      res=(wrote_date + @source[:max_age].day < Time.now) rescue false
     end
     
     def hot?(node)
       hit_count=node.xpath(@source[:hit_count_in_thread_list_xpath])[0].content.to_i rescue 0
-      hit_count > 200
+      hit_count > @source[:min_hit]
     end
     
     def thread_id(node)
       node["id"].scan(@source[:thread_id_pattern])[0][0] rescue nil
     end
-    
     
   end
 

@@ -5,8 +5,9 @@ require 'thread'
 
 
 module Crawl
+  
+  
   class Core
-    
     def initialize()
       @http=Crawl::HTTP.new()
       @source=Crawl::Source.enabled
@@ -24,16 +25,14 @@ module Crawl
       @source.each do |sou|
         analyser=Object.const_get(sou[:analyser]).new(sou)
         sou[:entrances].each do |entr|
-          puts "Find links in => #{entr}"
           entr=entr.is_a?(URI) ? entr : URI(entr)
-          
           # get web page of each place
           page=@http.fetch_page(entr,sou[:charset])
           # get useful links in the web page
           analyser.extract_links(page).each { |link| @link_queue << [link,analyser] }
         end
       end
-      
+      @workers.size.times {@link_queue<<:END} 
       @workers.each { |th| th.join }
     end
 
@@ -48,17 +47,28 @@ module Crawl
     def run
       loop do
         link,analyser=@queue.deq
-        puts "Fetch archive page => #{link.to_s}"
+        break if link==:END
+        puts "Fetch page => #{link.to_s}"
         # fetch page
         page=@http.fetch_page(link,analyser.source[:charset])
         if page.error
           puts "Error fetch page => #{e.message}"
           next
         end
-        puts "HTTP-#{page.code}"
-        next if page.code!='200'
+        #puts "HTTP-#{page.code}|| #{page.code.class}"
+        next if page.code!=200
         # get real content of the archive
-        txt=analyser.extract_content(page)
+        analyser.extract_content(page) do |h|
+          #puts h[:title]
+          #puts h[:pub_date]
+          #puts h[:uid]
+          begin
+            Archive.create(h)
+          rescue Exception => e
+            puts e.message
+            puts e.traceback
+          end
+        end
         puts "OK"
       end
     end

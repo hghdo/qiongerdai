@@ -10,9 +10,12 @@
   <div class="wrapper">
     <ul id="navigation">
       <li><%= link_to "管理首页", admin_console_path %></li>
+      <li><%= link_to "新下载的", admin_archives_path(:status => Archive::NEW) %></li>
+      <li><%= link_to "分析完毕的", admin_archives_path(:status => Archive::ANALYZED) %></li>
       <li><%= link_to "等待验证的", admin_archives_path(:status => Archive::SYNCED) %></li>
       <li><%= link_to "已经被锁定的", admin_archives_path(:status => Archive::LOCKED) %></li>
       <li><%= link_to "验证通过的", admin_archives_path(:status => Archive::OK) %></li>
+      <li><%= link_to "删除了的", admin_archives_path(:status => Archive::DELETED) %></li>
       <li><%= link_to "首页", root_path %></li>
     </ul>
     <h1 class="admin-title">网站管理<%= @title.blank? ? '' : "-#{@title}" %></h1>
