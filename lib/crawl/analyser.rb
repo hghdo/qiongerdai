@@ -1,0 +1,124 @@
+require 'nokogiri'
+
+#module Crawl
+  
+  # This class is used to help parse a html page and extract
+  # useful content according the given source configuration.
+  class GeneralAnalyser
+    
+    attr_accessor :source
+    
+    def initialize(source)
+      @source=source
+    end
+
+    # extract all links that is point to an archive need to crawl.
+    def extract_links(page)
+      page.links(@source[:archive_patterns])
+    end
+    
+    # Extract content from html, and save the content to db.
+    def extract_content(page)
+      # calculate archive unique id
+      uid=page.url.to_s.scan(@source[:unique_id_pattern])[0] rescue page.url.to_s
+      # Check whether this archive is already existed in db.
+      
+      # Get title
+      title=page.doc.at_css('title','TITLE').content
+      # Get Content
+      content_node_set=fetch_content_nodes(page)
+      return nil if title.blank? || content_node_set.size<1
+      # filter old archives
+      pub_time=fetch_pub_time(page)
+      return nil if pub_time.nil? || pub_time+@source[:max_age].day<Time.now
+      # do some extra work if needed
+      extra_work(content_node_set) if self.respond_to?('extra_work')
+      
+      desc_meta=page.doc.xpath("//meta[@name='description']")[0]
+      keywords_meta=page.doc.xpath("//meta[@name='keywords']")[0]
+      analyzed_page={
+        :title => title, :url => page.url.to_s, :uid => uid, 
+        :put_date => pub_time, 
+        :desc => desc_meta.blank? ? '' : desc_meta['content'],
+        :keywords => keywords_meta.blank? ? '' : keywords_meta['content'],
+        :content => content_node_set.inject(''){|c,i|c+=i.to_html(:encoding => 'utf-8')} ,
+      }       
+      yield analyzed_page if block_given?
+    end
+    
+    
+    def fetch_content_nodes(page)
+      content_node_set=page.doc.send(@source[:search_content_node_method]||'xpath',@source[:content_path_expression])
+    end
+    
+    def fetch_pub_time(page)
+      pub_date_node=page.doc.at_css(@source[:pub_date_css])
+      pub_time=DateTime.parse(pub_date_node.content.scan(@source[:pub_date_pattern])[0]) rescue nil
+    end
+
+    #
+    # Converts relative URL *link* into an absolute URL based on the
+    # location of the page
+    #
+    def to_absolute(link)
+      return nil if link.nil?
+
+      # remove anchor
+      link = URI.encode(URI.decode(link.to_s.gsub(/#[a-zA-Z0-9_-]*$/,'')))
+
+      relative = URI(link)
+      absolute = @url.merge(relative)
+
+      absolute.path = '/' if absolute.path.empty?
+
+      return absolute
+    end
+
+  end
+  
+  
+  
+  class ForumAnalyser < GeneralAnalyser
+    # extract all links that is point to an archive need to crawl.
+    # For bbs go through all the thread and get thread id, author id etc. 
+    # Then generate a link to a Post.
+    def extract_links(page)
+      links=[]
+      threadlist=page.doc.xpath(@source[:thread_list_xpath])
+      threadlist.each do |thr|
+        next if top?(thr)
+        next if old?(thr)
+        next if !hot?(thr)
+        link=@source[:link_template].sub(/#THRID#/,thread_id(thr)).sub(/#AUTHID#/,author_id(thr)) rescue nil
+        links << link if not link.nil?
+      end
+    end
+    
+    def author_id(node)
+      author_url=node.xpath(@source[:author_id_url_in_thread_list_xpath])[0]['href'] rescue nil
+      auth_id=author_url.scan(@source[:author_id_scan_pattern])[0][0] rescue nil
+    end
+    
+    
+    def top?(node)
+      node["id"]=~/^stickthread/
+    end
+    
+    def old?(node)
+      wrote_date=DateTime.parse(node.xpath(@source[:wrote_date_in_thread_list_xpath])[0].content) rescue nil
+      wrote_date + 3.day > Time.now
+    end
+    
+    def hot?(node)
+      hit_count=node.xpath(@source[:hit_count_in_thread_list_xpath])[0].content.to_i rescue 0
+      hit_count > 200
+    end
+    
+    def thread_id(node)
+      node["id"].scan(@source[:thread_id_pattern])[0][0] rescue nil
+    end
+    
+    
+  end
+
+#end
