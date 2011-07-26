@@ -69,19 +69,8 @@ class Archive < ActiveRecord::Base
     end
   end
 
-  # deprecate
-  def extract_thumbnail
-    return self if provider.format!='rss'
-    doc=Nokogiri::HTML(self.desc)
-    self.content=self.desc if !provider.full_content? && self.content.blank?
-    self.desc=doc.content
-    if self.thumbnail.blank?
-      img=doc.xpath('//img')[0]
-      img=Nokogiri::HTML(self.content).xpath('//img')[0] if img.blank?  && provider.full_content
-      self.thumbnail=img['src'] unless img.blank?
-    end
-  end
-
+  # deprecated
+  # Used for update img['src'] attributes after archive id has changed
   def refresh_img_url(old_id)
     return true if self.id==old_id.to_i
     ns=content_dom

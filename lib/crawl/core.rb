@@ -59,14 +59,15 @@ module Crawl
         next if page.code!=200
         # get real content of the archive
         analyser.extract_content(page) do |h|
-          #puts h[:title]
-          #puts h[:pub_date]
-          #puts h[:uid]
+          # puts h[:title]
+          # puts h[:pub_date]
+          # puts h[:uid]
+          # puts h[:content]
           begin
             Archive.create(h)
           rescue Exception => e
             puts e.message
-            puts e.traceback
+            puts e.backtrace
           end
         end
         puts "OK"

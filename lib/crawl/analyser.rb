@@ -23,20 +23,22 @@ require 'time'
       # calculate archive unique id
       uid=page.url.to_s.scan(@source[:unique_id_pattern])[0][0] rescue page.url.to_s
       uid=@source[:name]+"-"+uid
-      # Check whether this archive is already existed in db.
+      #puts "UID is =>#{uid}"
+      # FIXME Check whether this archive is already existed in db.
       
-      # Get title
+      # Check title and Content. If title or content was nil then return
       title=page.doc.at_css('title','TITLE').content
-      # Get Content
       content_node_set=fetch_content_nodes(page)
       return nil if title.blank? || content_node_set.size<1
-      # filter old archives
+      # FIXME Check picture counts, ignore archives which has less than 5 pictures
+      
+      # Check archive publish time filter old archives
       pub_time=fetch_pub_time(page) 
       #puts "Pub time is=> #{pub_time}"
       return nil if pub_time.nil? || (pub_time+(@source[:max_age].days))<Time.now
-      # do some extra work if needed
+      # Do some extra work if needed
       extra_work(content_node_set) if self.respond_to?(:extra_work)
-      # get document META info
+      # Get document META info
       desc_meta=page.doc.xpath("//meta[@name='description']")[0]
       keywords_meta=page.doc.xpath("//meta[@name='keywords']")[0]
       analyzed_page={
@@ -46,7 +48,8 @@ require 'time'
         :keywords => keywords_meta.blank? ? '' : keywords_meta['content'],
         :content => content_node_set.inject(''){|c,i|c+=i.to_html(:encoding => 'utf-8')} ,
       }  
-      yield analyzed_page if block_given?
+      #yield analyzed_page if block_given?
+      #return analyzed_page
     end
     
     

@@ -1,21 +1,17 @@
 Qiongerdai::Application.routes.draw do
-  resources :products
-
-  get "archives/index"
+  #get "archives/index"
 
   resources :archives do
     get 'feed', :on => :collection
   end
 
-  resources :providers
-
+  resources :products
   resources :things
-
   resources :categories
 
   namespace :admin do
     match '/' => 'console#index',:as => :console
-    resources :providers,:things,:categories
+    resources :things,:categories
     resources :archives do
       get 'thumb', :on => :member
       put 'crop', :on => :member
@@ -78,7 +74,7 @@ Qiongerdai::Application.routes.draw do
   # root :to => "welcome#index"
   root :to => 'archives#index'
 
-  match '/:id' => 'categories#show',:constraints => {:id => /(digital)|(beauty)|(book)|(travel)/}
+  #match '/:id' => 'categories#show',:constraints => {:id => /(digital)|(beauty)|(book)|(travel)/}
 
   # See how all your routes lay out with "rake routes"
 
