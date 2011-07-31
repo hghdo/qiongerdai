@@ -1,13 +1,16 @@
 require 'rest_client'
 require 'zip/zipfilesystem'
+require 'crawl/down_img'
+
 namespace :archive do
   desc "analyze archive, including save images to local and select one as thumbnail"
   task :analyze => :environment do
+    Crawl::DownImg.new.crawl
     #Archive.where(["analyzed=?",false]).first.crawl_imgs
-    Archive.where(["status=?",Archive::NEW]).each do |arc|
-      arc.adjust_table_width
-      arc.crawl_imgs
-    end
+    #Archive.where(["status=?",Archive::NEW]).each do |arc|
+    #  arc.adjust_table_width
+    #  arc.crawl_imgs
+    #end
   end
 
   desc "upload analyzed file to web server along with a zip file including all related images"
@@ -41,5 +44,4 @@ namespace :archive do
     end
   end
 end
-
 

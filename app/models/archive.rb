@@ -9,8 +9,9 @@ class Archive < ActiveRecord::Base
   SMALL_THUMB='thumb96'
   BIG_THUMB='thumb150'
   # Archive status
-  # new => analyzed => synced => locked(verifying by some admin) <=> ok(published) => deleted(ignored)
-  DELETED=-1
+  # new => analyzed => synced => locked(being verified by some admin) <=> ok(published) => deleted(ignored)
+  DELETED=-2
+  IGNORE=-1
   NEW=0
   ANALYZED=1
   SYNCED=2
@@ -18,18 +19,11 @@ class Archive < ActiveRecord::Base
   OK=4
   
 
-#  before_create :extract_thumbnail
-  before_save :check_pub_date
+
 
   def content_dom
     return @dom if not @dom.blank?
     @dom=Nokogiri::HTML(self.content)
-  end
-
-  def check_pub_date
-    #logger.debug("in Archive check_pub_date method")
-    self.pub_date=Time.now.utc if self.pub_date.blank?
-    self
   end
 
   # Remove fixed width of table elements
@@ -99,29 +93,30 @@ class Archive < ActiveRecord::Base
           #puts pi['src']
           url=(page_url.merge(pi['src']))
           Thread.exit if File.extname(url.path).downcase==".gif"
-          flattened_name=url.path.sub(/\//,'').gsub(/\//,'_')   
-          iwp=File.join(img_warehouse_dir,flattened_name)
-          unless File.exists? iwp 
-            puts "Image file does not exist, crawl it."
-            http=Net::HTTP.new(url.host,url.port)
-            http.read_timeout=10
-            http.open_timeout=10
-            req=Net::HTTP::Get.new(url.path)
-            req.add_field 'HTTP_REFERER', self.url
-            res=http.request(req)
-            Thread.exit if res.class!=Net::HTTPOK
-            open(iwp, 'wb' ) { |file|
-              file.write(res.body)
-            }
-          end
-          FileUtils.cp(iwp,abs_img_path(flattened_name))
+          flattened_name=url.path.sub(/\//,'').gsub(/\//,'_') 
+          save_to=abs_img_path(flattened_name)
+          #iwp=File.join(img_warehouse_dir,flattened_name)
+          puts "Image file does not exist, crawl it."
+          http=Net::HTTP.new(url.host,url.port)
+          http.read_timeout=10
+          http.open_timeout=10
+          req=Net::HTTP::Get.new(url.path)
+          req.add_field 'HTTP_REFERER', self.url
+          res=http.request(req)
+          Thread.exit if res.class!=Net::HTTPOK
+          open(save_to, 'wb' ) { |file|
+            file.write(res.body)
+          }
+          # unless File.exists? iwp 
+          # end
+          #FileUtils.cp(iwp,abs_img_path(flattened_name))
           img_url_in_archive=File.join(img_url_dir,flattened_name)
           pi['src']=img_url_in_archive
           pi['class']='autosize'
           # remove image hardcode size attribute. 
           %w{width height style onmouseover onclick}.each{|att| pi.remove_attribute att}
           # FIXME Should create small size image as well. 
-          ImageScience.with_image(iwp){|thisimg| thumbnail_url=img_url_in_archive if thisimg.width>150} if thumbnail_url.blank?
+          ImageScience.with_image(save_to){|thisimg| thumbnail_url=img_url_in_archive if thisimg.width>150} if thumbnail_url.blank?
         rescue Exception => e
           puts "Error occurred when crawl images => #{e}"
           puts "Image url => #{url.to_s}"

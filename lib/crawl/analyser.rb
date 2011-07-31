@@ -29,13 +29,16 @@ require 'time'
       # Check title and Content. If title or content was nil then return
       title=page.doc.at_css('title','TITLE').content
       content_node_set=fetch_content_nodes(page)
-      return nil if title.blank? || content_node_set.size<1
+      return false,"title blank" if title.blank? || content_node_set.size<1
       # FIXME Check picture counts, ignore archives which has less than 5 pictures
+      img_nodes=content_node_set.css('img')
+      return false,"No enough images#{img_nodes.size}" if img_nodes.size<3
       
       # Check archive publish time filter old archives
       pub_time=fetch_pub_time(page) 
       #puts "Pub time is=> #{pub_time}"
-      return nil if pub_time.nil? || (pub_time+(@source[:max_age].days))<Time.now
+      return false,"pub time nil" if pub_time.nil?
+      return false,"Archive too old #{pub_time}" if (pub_time+(@source[:max_age].days))<Time.now
       # Do some extra work if needed
       extra_work(content_node_set) if self.respond_to?(:extra_work)
       # Get document META info
@@ -48,6 +51,7 @@ require 'time'
         :keywords => keywords_meta.blank? ? '' : keywords_meta['content'],
         :content => content_node_set.inject(''){|c,i|c+=i.to_html(:encoding => 'utf-8')} ,
       }  
+      return true,analyzed_page
       #yield analyzed_page if block_given?
       #return analyzed_page
     end
@@ -60,6 +64,7 @@ require 'time'
     def fetch_pub_time(page)
       #puts "pub date css => #{@source[:pub_date_css]}"
       pub_date_node=page.doc.at_css(@source[:pub_date_css])
+      #puts "pub date note text =>#{pub_date_node.text}"
       #puts "pub date string is => #{pub_date_node.content.scan(@source[:pub_date_pattern])[0][0]}"
       Time.parse(pub_date_node.content.scan(@source[:pub_date_pattern])[0][0]) rescue nil
     end
@@ -115,7 +120,7 @@ require 'time'
     end
     
     def split?(node)
-      node[:id].nil?
+      node["id"].nil?
     end
     
     def old?(node)
@@ -125,13 +130,14 @@ require 'time'
     
     def hot?(node)
       hit_count=node.xpath(@source[:hit_count_in_thread_list_xpath])[0].content.to_i rescue 0
+      #puts "hit count => #{hit_count}"
       hit_count > @source[:min_hit]
     end
     
     def thread_id(node)
       node["id"].scan(@source[:thread_id_pattern])[0][0] rescue nil
     end
-    
+
   end
 
 #end

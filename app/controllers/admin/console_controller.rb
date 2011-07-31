@@ -2,7 +2,7 @@ class Admin::ConsoleController < ApplicationController
   before_filter :authorized?
   layout 'console'
   def index
-    @unverified_count=Archive.where("status=?",Archive::SYNCED).count
+    @unverified_count=Archive.where("status=? or status=?",Archive::SYNCED,Archive::ANALYZED).count
     @locked_count=Archive.where("status=?",Archive::LOCKED).count
     respond_to do |format|
       format.html # index.html.erb
