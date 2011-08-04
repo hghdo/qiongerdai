@@ -57,7 +57,6 @@ module Crawl
           :entrances => [
             "http://club.eladies.sina.com.cn/forum-2-1.html",
             "http://club.eladies.sina.com.cn/forum-2-2.html",
-            #"http://club.eladies.sina.com.cn/forum-2-3.html",
             ],
           :thread_list_xpath => "//table[@id='forum_2']/tbody",
           :thread_id_pattern => /_(\d+)/,
@@ -76,6 +75,15 @@ module Crawl
           :min_hit => 100, 
           :min_reply => 10,
           }, 
+          
+          #
+          {
+            :name => 'yokaBlog',
+            :enabled => false, 
+            :analyser => 'GeneralAnalyser',
+            :entrances => ["http://blog.yoka.com/"], 
+
+          }
       ]
 
     end
