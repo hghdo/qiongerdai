@@ -4,7 +4,7 @@ module Crawl
       [
         #
         {:name => 'FGBlog',
-         :enabled => false,
+         :enabled => true,
          :analyser => 'GeneralAnalyser',
          :entrances => [
             "http://blog.fashionguide.com.tw/",
@@ -52,7 +52,7 @@ module Crawl
         }, 
         # 
         { :name => 'sinaForum',
-          :enabled => false,
+          :enabled => true,
           :analyser => 'ForumAnalyser',
           :entrances => [
             "http://club.eladies.sina.com.cn/forum-2-1.html",

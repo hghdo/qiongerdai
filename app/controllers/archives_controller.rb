@@ -17,8 +17,9 @@ class ArchivesController < ApplicationController
   def feed
     @archives = Archive.where(["status=?",Archive::OK]).order("pub_date desc").limit(10)
     #request.format=:xml
-    respond_to do |wants|
-      wants.any { render :layout => false }
+    respond_to do |format|
+      format.json { render :json => @archives }
+      format.xml { render :layout => false }
     end
   end
 

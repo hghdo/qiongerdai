@@ -25,18 +25,26 @@ module Crawl
         @workers << Thread.new{ Worker.new(@link_queue,@img_download_queue).run}
       end
 
-      
       @source.each do |sou|
+        log_file=File.expand_path("../logs/#{sou[:name]}.log",__FILE__)
+        if File.exists?(log_file)
+          line=File.open(log_file,'r'){|f| f.readline}
+          last_crawled_at=Time.parse(line) rescue (Time.now-3.day)
+          next if last_crawled_at+8.hour>Time.now
+        end
         analyser=Object.const_get(sou[:analyser]).new(sou)
         sou[:entrances].each do |entr|
           entr=entr.is_a?(URI) ? entr : URI(entr)
           # get web page of each place
           page=@http.fetch_page(entr,sou[:charset])
+          if page.error
+            puts "Can't enter source entrance!!! => #{e.message}"
+            next
+          end
           # get useful links in the web page
           analyser.extract_links(page).each { |link| @link_queue << [link,analyser] }
         end
-        puts "Crawl log file => #{File.expand_path("../log",__FILE__)}"
-
+        File.open(log_file,'w'){|f| f.puts Time.now}
       end
       @workers.size.times {@link_queue<<:END} 
       @workers.each { |th| th.join }
