@@ -2,7 +2,7 @@ require 'rest_client'
 require 'zip/zipfilesystem'
 require 'crawl/down_img'
 
-namespace :archive do
+namespace :archives do
   desc "analyze archive, including save images to local and select one as thumbnail"
   task :analyze => :environment do
     Crawl::DownImg.new.crawl

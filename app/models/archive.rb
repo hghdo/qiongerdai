@@ -4,6 +4,7 @@ class Archive < ActiveRecord::Base
   belongs_to :provider
 
   validates_uniqueness_of :url, :message => "DUPLICATED"
+  validates_uniqueness_of :uid, :message => "DUPLICATED"
 
   TINY_THUMB='thumb48'
   SMALL_THUMB='thumb96'

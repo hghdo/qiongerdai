@@ -23,9 +23,9 @@ require 'time'
       # calculate archive unique id
       uid=page.url.to_s.scan(@source[:unique_id_pattern])[0][0] rescue page.url.to_s
       uid=@source[:name]+"-"+uid
-      #puts "UID is =>#{uid}"
+      # puts "UID is =>#{uid}"
       # FIXME Check whether this archive is already existed in db.
-      next if Archive.exists?(:uid => uid)
+      # next if Archive.exists?(:uid => uid)
       
       # Check title and Content. If title or content was nil then return
       title=page.doc.at_css('title','TITLE').content

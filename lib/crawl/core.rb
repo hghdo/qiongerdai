@@ -3,6 +3,7 @@ require 'crawl/http'
 require 'crawl/analyser'
 require 'thread'
 require 'net/http'
+require 'app/models/archive'
 
 
 module Crawl
@@ -12,16 +13,16 @@ module Crawl
     def initialize()
       @http=Crawl::HTTP.new()
       @source=Crawl::Source.enabled
-      @pages=[]
+      #@pages=[]
       @link_queue=Queue.new
       #@img_download_queue=Queue.new
       @workers=[]
-      @img_workers=[]
+      #@img_workers=[]
     end
 
     def crawl
       # Fork some workers
-      1.times do
+      3.times do
         @workers << Thread.new{ Worker.new(@link_queue,@img_download_queue).run}
       end
 
@@ -30,7 +31,7 @@ module Crawl
         if File.exists?(log_file)
           line=File.open(log_file,'r'){|f| f.readline}
           last_crawled_at=Time.parse(line) rescue (Time.now-3.day)
-          next if last_crawled_at+8.hour>Time.now
+          #next if last_crawled_at+8.hour>Time.now
         end
         analyser=Object.const_get(sou[:analyser]).new(sou)
         sou[:entrances].each do |entr|
@@ -84,11 +85,16 @@ module Crawl
         # puts h[:uid]
         # puts h[:content]
         begin
-          archive=Archive.create(remark)
+          archive=Archive.new(remark)
+          archive.save
           puts "Saved archive to DB"
           #@img_download_queue<<archive
+        rescue Mysql2::Error => me
+          puts me.message
+          next
         rescue Exception => e
-          puts e.message
+          puts "Unknown Exception:#{e.message}"
+          puts link
           puts e.backtrace
         end
       end
