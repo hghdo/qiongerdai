@@ -6,6 +6,9 @@ class IntegrateStatusToArchives < ActiveRecord::Migration
     remove_column :archives, :ok
     remove_column :archives, :locked
     remove_column :archives, :deleted
+    add_index  :archives, [:status]
+    add_index  :archives, [:pub_date]
+    add_index  :archives, [:created_at]
   end
 
   def self.down

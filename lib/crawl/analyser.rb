@@ -25,6 +25,7 @@ require 'time'
       uid=@source[:name]+"-"+uid
       #puts "UID is =>#{uid}"
       # FIXME Check whether this archive is already existed in db.
+      next if Archive.exists?(:uid => uid)
       
       # Check title and Content. If title or content was nil then return
       title=page.doc.at_css('title','TITLE').content

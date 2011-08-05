@@ -75,22 +75,21 @@ module Crawl
         next if page.code!=200
         # get real content of the archive
         ok,remark,content_node_set=analyser.extract_content(page)
-        if ok
-          # puts h[:title]
-          # puts h[:pub_date]
-          # puts h[:uid]
-          # puts h[:content]
-          begin
-            archive=Archive.create(remark)
-            #@img_download_queue<<archive
-          rescue Exception => e
-            puts e.message
-            puts e.backtrace
-          end
-          puts "Save archive to DB"
-        else
+        if !ok
           puts "analyse failed => #{remark}"
           next
+        end
+        # puts h[:title]
+        # puts h[:pub_date]
+        # puts h[:uid]
+        # puts h[:content]
+        begin
+          archive=Archive.create(remark)
+          puts "Saved archive to DB"
+          #@img_download_queue<<archive
+        rescue Exception => e
+          puts e.message
+          puts e.backtrace
         end
       end
     end
