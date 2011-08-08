@@ -5,7 +5,7 @@ class ArchivesController < ApplicationController
   # GET /archives
   # GET /archives.xml
   def index
-    @archives = Archive.where(["status=?",Archive::OK]).order("pub_date desc").page(params[:page]).per(15)
+    @archives = Archive.where(["status=?",Archive::OK]).order("created_at desc").page(params[:page]).per(15)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -15,10 +15,12 @@ class ArchivesController < ApplicationController
   end
 
   def feed
-    @archives = Archive.where(["status=?",Archive::OK]).order("pub_date desc").limit(10)
+    @archives = Archive.where(["status=?",Archive::OK]).order("created_at").limit(10)
     #request.format=:xml
     respond_to do |format|
-      format.json { render :json => @archives }
+      format.json do 
+        render :json => @archives 
+      end
       format.xml { render :layout => false }
     end
   end

@@ -20,7 +20,7 @@ class Admin::ArchivesController < Admin::ConsoleController
     @archive.update_attribute('status',Archive::OK)
     expire_page feed_archives_path 
     respond_to do |wants|
-      wants.html { redirect_to admin_console_path}
+      wants.html { redirect_to admin_archives_path(:status => 1)}
     end
     
   end
@@ -141,7 +141,7 @@ class Admin::ArchivesController < Admin::ConsoleController
     @archive.update_attribute('status',Archive::DELETED)
 
     respond_to do |format|
-      format.html { redirect_to(admin_console_path) }
+      format.html { redirect_to(admin_archives_path :status => 1 ) }
       format.xml  { head :ok }
     end
   end

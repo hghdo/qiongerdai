@@ -10,7 +10,7 @@ module Crawl
     end
 
     def crawl
-      1.times do
+      3.times do
         @img_workers << Thread.new{ImageWorker.new(@queue).run}
       end
 
@@ -41,6 +41,7 @@ module Crawl
         thumbnail_url=nil
         page_url=URI(archive.url)
         imgs.each do |pi|
+          retried_times=0
           # skip noisy images
           #next if html_struct[:noisy_img_patterns].any? {|patt| pi['src']=~ patt}
           begin
@@ -70,10 +71,14 @@ module Crawl
             %w{width height style onmouseover onclick}.each{|att| pi.remove_attribute att}
             # FIXME Should create small size image as well. 
             ImageScience.with_image(save_to){|thisimg| thumbnail_url=img_url_in_archive if thisimg.width>150} if thumbnail_url.blank?
-          rescue Exception => e
-            puts "Error occurred when crawl images => #{e}"
-            puts "Image url => #{url.to_s}"
-            puts e.backtrace
+          rescue Timeout::Error
+            retried_times+=1
+            puts "Timeout crawl images => #{url.to_s}"
+            retry if retried_times<2
+            next            
+          rescue
+            puts "Error! #{e.class} => #{e.message}"
+            puts e.traceback
             next
           end
         end
