@@ -1,4 +1,6 @@
 Qiongerdai::Application.routes.draw do
+  resources :devices
+
   #get "archives/index"
 
   resources :archives do
