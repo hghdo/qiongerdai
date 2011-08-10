@@ -40,7 +40,9 @@ class DevicesController < ApplicationController
   # POST /devices
   # POST /devices.xml
   def create
-    @device = Device.new(params[:device])
+    device=Device.find_by_uid(params[:uid])
+    
+    
 
     respond_to do |format|
       if @device.save

@@ -4,7 +4,8 @@ class CreateDevices < ActiveRecord::Migration
   # Each digital represent usage amount in one day
   def self.up
     create_table :devices do |t|
-      t.string :imei_hash
+      t.datetime :installed_at
+      t.string :uid
       t.boolean :debug, :default => false 
       t.string :version
       t.string :os

@@ -3,6 +3,7 @@ In order to manage archives crawled from internet
 As a administrator
 I want to manage archives
 
+  @wip
   Scenario: Audit new archives
     Given New archives need to be audited
     When Admin selecte one archive to audit
