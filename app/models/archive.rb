@@ -66,17 +66,17 @@ class Archive < ActiveRecord::Base
 
   # deprecated
   # Used for update img['src'] attributes after archive id has changed
-  def refresh_img_url(old_id)
-    return true if self.id==old_id.to_i
-    ns=content_dom
-    ns.xpath('//img').each do |pi|
-      pi['src']=pi['src'].sub(/\/images\/archives\/\d+\//,"/images/archives/#{self.id}/") if pi['class']=='autosize' && pi['src']=~/\/images\/archives\/\d+\//
-      logger.debug("AAAA => #{pi['src']}")
-    end
-    self.thumbnail=self.thumbnail.sub(/\/images\/archives\/\d+\//,"/images/archives/#{self.id}/")
-    self.content=ns.to_html 
-    self.save
-  end
+  # def refresh_img_url(old_id)
+  #   return true if self.id==old_id.to_i
+  #   ns=content_dom
+  #   ns.xpath('//img').each do |pi|
+  #     pi['src']=pi['src'].sub(/\/images\/archives\/\d+\//,"/images/archives/#{self.id}/") if pi['class']=='autosize' && pi['src']=~/\/images\/archives\/\d+\//
+  #     logger.debug("AAAA => #{pi['src']}")
+  #   end
+  #   self.thumbnail=self.thumbnail.sub(/\/images\/archives\/\d+\//,"/images/archives/#{self.id}/")
+  #   self.content=ns.to_html 
+  #   self.save
+  # end
 
   def crawl_imgs()
     puts "crawl images of #{self.title}"
@@ -130,14 +130,14 @@ class Archive < ActiveRecord::Base
     self.update_attributes({:content => content_node_set.to_html,:thumbnail => thumbnail_url,:status => ANALYZED})
   end
 
-  def all_image_filenames
-    return @images unless @images.blank?
-    @images=[]
-    Dir.foreach(self.abs_img_dir) do |file|
-      @images<<file unless file=~/^\./
-    end
-    @images
-  end
+  # def all_image_filenames
+  #   return @images unless @images.blank?
+  #   @images=[]
+  #   Dir.foreach(self.abs_img_dir) do |file|
+  #     @images<<file unless file=~/^\./
+  #   end
+  #   @images
+  # end
 
   def img_warehouse_dir
     return @iwd unless @iwd.blank?

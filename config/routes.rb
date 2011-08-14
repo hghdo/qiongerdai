@@ -1,7 +1,4 @@
 Qiongerdai::Application.routes.draw do
-  resources :devices
-
-  #get "archives/index"
 
   resources :archives do
     get 'feed', :on => :collection
@@ -22,6 +19,9 @@ Qiongerdai::Application.routes.draw do
       put 'unlock', :on => :member
     end
   end
+  
+  # collect mobile devices ping data
+  match 'ping' => 'pings#create'
 
 
   # The priority is based upon order of creation:
