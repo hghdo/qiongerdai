@@ -4,7 +4,7 @@ class Device < ActiveRecord::Base
     self.recent_usage=str
     count=str.each_char.inject(0){|sum,c| sum+=HourPreferUsage.char2num(c)}
     logger.debug("AAAAAAAAAAA=> #{count}")
-    recent_using_frequency=count.to_f/str.length
+    self.recent_using_frequency=count.to_f/str.length
     logger.debug("BBBBBBBBBBBB=> #{recent_using_frequency}")
     self.totally_usage||=0
     self.totally_usage+=count
