@@ -130,14 +130,14 @@ class Archive < ActiveRecord::Base
     self.update_attributes({:content => content_node_set.to_html,:thumbnail => thumbnail_url,:status => ANALYZED})
   end
 
-  # def all_image_filenames
-  #   return @images unless @images.blank?
-  #   @images=[]
-  #   Dir.foreach(self.abs_img_dir) do |file|
-  #     @images<<file unless file=~/^\./
-  #   end
-  #   @images
-  # end
+  def all_image_filenames
+    return @images unless @images.blank?
+    @images=[]
+    Dir.foreach(self.abs_img_dir) do |file|
+      @images<<file unless file=~/^\./
+    end
+    @images
+  end
 
   def img_warehouse_dir
     return @iwd unless @iwd.blank?

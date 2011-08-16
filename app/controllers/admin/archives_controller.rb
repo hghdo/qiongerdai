@@ -1,3 +1,4 @@
+require 'fileutils'
 class Admin::ArchivesController < Admin::ConsoleController
 
   before_filter :authorized?, :except => :create
@@ -18,7 +19,10 @@ class Admin::ArchivesController < Admin::ConsoleController
   def ok
     @archive.to_zip
     @archive.update_attribute('status',Archive::OK)
-    expire_page feed_archives_path 
+    # delete cached pages
+    cached_pages=File.join(Rails.public_path,'archives/*')
+    FileUtils.rm Dir.glob(cached_pages), :force => true 
+    # expire_page feed_archives_path
     respond_to do |wants|
       wants.html { redirect_to admin_archives_path(:status => 1)}
     end
