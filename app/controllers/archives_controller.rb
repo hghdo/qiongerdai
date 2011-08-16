@@ -15,7 +15,7 @@ class ArchivesController < ApplicationController
   end
 
   def feed
-    @archives = Archive.where(["status=?",Archive::OK]).order("created_at").limit(10)
+    @archives = Archive.where(["status=?",Archive::OK]).order("created_at").limit(2)
     #request.format=:xml
     respond_to do |format|
       format.json do 
