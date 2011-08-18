@@ -76,7 +76,7 @@ module Crawl
             puts "Timeout crawl images => #{url.to_s}"
             retry if retried_times<2
             next            
-          rescue
+          rescue Exception => e
             puts "Error! #{e.class} => #{e.message}"
             puts e.traceback
             next
