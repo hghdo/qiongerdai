@@ -78,7 +78,7 @@ module Crawl
             next            
           rescue Exception => e
             puts "Error! #{e.class} => #{e.message}"
-            puts e.traceback
+            puts e.backtrace
             next
           end
         end
