@@ -27,7 +27,7 @@ module Crawl
       end
 
       @source.each do |sou|
-        log_file=File.expand_path("#{RAILS_ROOT}/log/#{sou[:name]}.log",__FILE__)
+        log_file=File.expand_path("#{Rails.root.to_s}/log/#{sou[:name]}.log",__FILE__)
         if File.exists?(log_file)
           line=File.open(log_file,'r'){|f| f.readline}
           last_crawled_at=Time.parse(line) rescue (Time.now-3.day)
@@ -39,7 +39,7 @@ module Crawl
           # get web page of each place
           page=@http.fetch_page(entr,sou[:charset])
           if page.error
-            puts "Can't enter source entrance!!! => #{e.message}"
+            puts "Can't enter source entrance!!! => #{page.error}"
             next
           end
           # get useful links in the web page

@@ -15,13 +15,13 @@ class ArchivesController < ApplicationController
   end
 
   def feed
-    @archives = Archive.where(["status=?",Archive::OK]).order("updated_at desc").limit(10)
+    @archives = Archive.where(["status=?",Archive::OK]).order("updated_at desc").limit(2)
     #request.format=:xml
     respond_to do |format|
       format.json do 
         render :json => @archives 
       end
-      format.xml { render :layout => false }
+      format.xml { render :layout => false, :content_type => "application/rss"  }
     end
   end
 

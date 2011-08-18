@@ -22,6 +22,8 @@ Qiongerdai::Application.routes.draw do
   
   # collect mobile devices ping data
   match 'ping' => 'pings#create'
+  
+  match 'version' => 'versions#ga'
 
 
   # The priority is based upon order of creation:
