@@ -10,7 +10,7 @@ module Crawl
     end
 
     def crawl
-      3.times do
+      1.times do
         @img_workers << Thread.new{ImageWorker.new(@queue).run}
       end
 
@@ -55,15 +55,23 @@ module Crawl
               next
             end
             http=connection(url)
-            http.read_timeout=10
-            http.open_timeout=10
+            # http.read_timeout=10
+            # http.open_timeout=10
             req=Net::HTTP::Get.new(url.path)
             req.add_field 'HTTP_REFERER', archive.url
             res=http.request(req)
             next if res.class!=Net::HTTPOK
-            open(save_to, 'wb' ) { |file|
-              file.write(res.body)
-            }
+            puts "DDDDDDDDDDDDDDDDDDDD => #{res.content_type}"
+            # add extname if no ext name
+            if File.extname(save_to).blank?
+              ext=res.content_type.downcase.scan(/image\/(\w+)/)[0][0] rescue nil
+              next if ext.nil?
+              ext='jpg' if ext=='jpeg'
+              save_to+=".#{ext}"
+              flattened_name+=".#{ext}"
+              puts "NEW SAVE_TO => #{save_to}"
+            end
+            open(save_to, 'wb' ) { |file| file.write(res.body) }
             img_url_in_archive=File.join(archive.img_url_dir,flattened_name)
             pi['src']=img_url_in_archive
             pi['class']='autosize'

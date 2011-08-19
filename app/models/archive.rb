@@ -6,9 +6,9 @@ class Archive < ActiveRecord::Base
   validates_uniqueness_of :url, :message => "DUPLICATED"
   validates_uniqueness_of :uid, :message => "DUPLICATED"
 
-  TINY_THUMB='thumb48'
-  SMALL_THUMB='thumb96'
-  BIG_THUMB='thumb150'
+  TINY_THUMB='thumb48.jpg'
+  SMALL_THUMB='thumb96.jpg'
+  BIG_THUMB='thumb150.jpg'
   # Archive status
   # new => analyzed => synced => locked(being verified by some admin) <=> ok(published) => deleted(ignored)
   DELETED=-2
@@ -35,6 +35,7 @@ class Archive < ActiveRecord::Base
     self.update_attribute('content',content_dom.to_html)
   end
 
+  # FIXME should generate differnet img size package
   def to_zip
     # generate mobile type html file
     File.open(File.join(self.abs_img_dir,"#{self.id}.html"),"w") do |html|
@@ -53,8 +54,8 @@ class Archive < ActiveRecord::Base
       html.puts('</div>')
       html.puts('</body></html>')
     end
-    # re-generate zip file 
-    zip_file=File.join(self.abs_img_dir,"#{self.id}.pkg.zip")
+    # generate origin quality zip file 
+    zip_file=to_abs(zip_url_path('h'))
     FileUtils.rm zip_file, :force => true
     Zip::ZipFile.open(zip_file,Zip::ZipFile::CREATE) do |zip|
       zip.dir.mkdir("#{self.id}")
@@ -62,6 +63,72 @@ class Archive < ActiveRecord::Base
         zip.add("#{self.id}/#{img}","#{self.abs_img_dir}/#{img}") unless img=~/^\./ 
       end
     end
+    
+    # generated middle quality zip file
+    clear_tmp
+    zip_file=to_abs(zip_url_path('m'))
+    FileUtils.rm zip_file, :force => true
+    Zip::ZipFile.open(zip_file,Zip::ZipFile::CREATE) do |zip|
+      zip.dir.mkdir("#{self.id}")
+      Dir.foreach(self.abs_img_dir) do |img|
+        next if img.start_with?('.')
+        # resize img
+        if img.end_with? 'html'
+          zip.add("#{self.id}/#{img}","#{self.abs_img_dir}/#{img}")
+        else
+          ImageScience.with_image("#{self.abs_img_dir}/#{img}") do |is_pic|
+            if is_pic.width>480
+              new_height=(is_pic.height.to_f/is_pic.width) * 480
+              is_pic.resize(480,new_height){|np| np.save("#{tmp_path}/#{img}")}
+            else
+              is_pic.save("#{tmp_path}/#{img}")
+            end
+          end
+          # add to zip file   
+          zip.add("#{self.id}/#{img}","#{tmp_path}/#{img}")
+        end
+      end
+    end
+    
+    # generated low quality zip file
+    clear_tmp
+    zip_file=to_abs(zip_url_path('l'))
+    FileUtils.rm zip_file, :force => true
+    Zip::ZipFile.open(zip_file,Zip::ZipFile::CREATE) do |zip|
+      zip.dir.mkdir("#{self.id}")
+      Dir.foreach(self.abs_img_dir) do |img|
+        next if img.start_with?('.')
+        # resize img
+        if img.end_with? 'html'
+          zip.add("#{self.id}/#{img}","#{self.abs_img_dir}/#{img}")
+        else
+          ImageScience.with_image("#{self.abs_img_dir}/#{img}") do |is_pic|
+            if is_pic.width>320
+              new_height=(is_pic.height.to_f/is_pic.width) * 320
+              is_pic.resize(320,new_height){|np| np.save("#{tmp_path}/#{img}")}
+            else
+              is_pic.save("#{tmp_path}/#{img}")
+            end
+          end
+          # add to zip file   
+          zip.add("#{self.id}/#{img}","#{tmp_path}/#{img}")
+        end
+      end
+    end
+    FileUtils.rm_rf tmp_folder
+  end
+  
+  def package(quality='m')
+    
+  end
+  
+  def clear_tmp
+    FileUtils.rm_rf tmp_folder
+    FileUtils.mkdir_p tmp_folder
+  end
+  
+  def tmp_folder
+    @tmp||=File.join(Rails.root,"tmp/archive_#{self.id}")
   end
 
   # deprecated
@@ -78,6 +145,7 @@ class Archive < ActiveRecord::Base
   #   self.save
   # end
 
+  # deprecated this method has been already moved to crawl library.
   def crawl_imgs()
     puts "crawl images of #{self.title}"
     thumbnail_url=nil
@@ -96,7 +164,6 @@ class Archive < ActiveRecord::Base
           Thread.exit if File.extname(url.path).downcase==".gif"
           flattened_name=url.path.sub(/\//,'').gsub(/\//,'_') 
           save_to=abs_img_path(flattened_name)
-          #iwp=File.join(img_warehouse_dir,flattened_name)
           puts "Image file does not exist, crawl it."
           http=Net::HTTP.new(url.host,url.port)
           http.read_timeout=10
@@ -129,21 +196,15 @@ class Archive < ActiveRecord::Base
     threads.each {|thr| thr.value}
     self.update_attributes({:content => content_node_set.to_html,:thumbnail => thumbnail_url,:status => ANALYZED})
   end
+  
 
   def all_image_filenames
     return @images unless @images.blank?
     @images=[]
     Dir.foreach(self.abs_img_dir) do |file|
-      @images<<file unless file=~/^\./
+      @images<<file unless file.start_with?('.') && file.end_with?('html')
     end
     @images
-  end
-
-  def img_warehouse_dir
-    return @iwd unless @iwd.blank?
-    @iwd=File.join(Rails.root,"/public/images/crawl")
-    FileUtils.mkdir_p(@iwd) unless File.exists? @iwd
-    @iwd
   end
 
   def abs_img_path(img_name)
@@ -157,19 +218,31 @@ class Archive < ActiveRecord::Base
   # dir part of the image url
   def img_url_dir
     return @ird unless @ird.blank?
-    @ird=File.join("/images/archives",self.id.to_s)
+    @ird=File.join(self.root_url_dir,"pics")
   end
 
   # absolute path of the dir to save images of an archive
   def abs_img_dir
     return @aid unless @aid.blank?
-    @aid=File.join(Rails.root,"public",img_url_dir)
+    @aid=File.join(Rails.public_path,img_url_dir)
     FileUtils.mkdir_p(@aid) unless File.exists? @aid
     @aid
   end
 
-  def zip_url_path()
-    File.join(img_url_dir,"#{self.id}.pkg.zip")
+  # FIXME has different size of package
+  def zip_url_path(size="m")
+    File.join(self.root_url_dir,"#{self.id}_#{size}.zip")
+  end  
+  
+  def root_url_dir()
+    return @srud unless @srud.blank?
+    @srud=File.join("/images/archives",self.id.to_s)
+    FileUtils.mkdir_p(@srud) unless File.exists? @srud
+    @srud
+  end
+  
+  def to_abs(path)
+    File.join(Rails.public_path,path)
   end
 
   def thumb_filenames()

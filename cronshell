@@ -1,12 +1,10 @@
-<<<<<<< HEAD
-#! /bin/sh
-=======
 #! /bin/bash
->>>>>>> 6ae6c23bd879f76c7b4c5eaaec58a8dbc6941f67
-cd /home/david/work/ror/Galactica
-log_file_name=`date +%Y-%m-%dT%H_%M`
+
+cd /home/david/work/ror/qiongerdai
+
+log_prefix=`date +%Y-%m-%dT%H_%M`
 
 env=development
-PATH=/opt/ruby/bin:$PATH 
-rake RAILS_ENV=${env} provider:fetch >log/${log_file_name}.fetch.${env}.log 2>&1
-rake RAILS_ENV=${env} archive:analyze >log/${log_file_name}.analyze.${env}.log 2>&1
+
+rake RAILS_ENV=${env} spider:crawl >log/${log_prefix}.crawl.${env}.out 2>&1
+rake RAILS_ENV=${env} spider:downimg >log/${log_prefix}.downimg.${env}.out 2>&1

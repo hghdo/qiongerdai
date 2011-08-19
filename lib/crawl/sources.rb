@@ -4,7 +4,7 @@ module Crawl
       [
         #
         {:name => 'FGBlog',
-         :enabled => true,
+         :enabled => false,
          :analyser => 'GeneralAnalyser',
          :entrances => [
             "http://blog.fashionguide.com.tw/",
@@ -20,11 +20,11 @@ module Crawl
           :pub_date_css => "div#wrapper>div#blog>div#blogcontent div.head>div.time", 
           :pub_date_pattern => /\s(\d{4}.+)/,
           :charset => 'big5',
-          :max_age => 2, 
+          :max_age => 1, 
         }, 
         # 
         { :name => 'rayliForum',
-          :enabled => true,
+          :enabled => false,
           :analyser => 'ForumAnalyser',
           :entrances => [
             "http://bbs.rayli.com.cn/forum-19-1.html",

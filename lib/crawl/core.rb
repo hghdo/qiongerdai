@@ -27,7 +27,7 @@ module Crawl
       end
 
       @source.each do |sou|
-        log_file=File.expand_path("#{Rails.root.to_s}/log/#{sou[:name]}.log",__FILE__)
+        log_file=File.expand_path("#{Rails.root.to_s}/log/#{sou[:name]}.ts",__FILE__)
         if File.exists?(log_file)
           line=File.open(log_file,'r'){|f| f.readline}
           last_crawled_at=Time.parse(line) rescue (Time.now-3.day)
