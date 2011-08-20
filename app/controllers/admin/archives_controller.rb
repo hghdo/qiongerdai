@@ -32,25 +32,25 @@ class Admin::ArchivesController < Admin::ConsoleController
   def thumb
     @images=@archive.all_image_filenames
     @source=params[:source]||@archive.thumbnail
-    @source=@archive.img_url_path(@source) if @source[0]!=47 #'/' is 47
+    @source=@archive.img_url_path(@source,'h') if @source[0]!=47 #'/' is 47
     render :layout => false
   end
 
   def crop
     thumb_source=File.basename(params[:source])
     big,small,tiny=@archive.thumb_filenames()
-    ImageScience.with_image(@archive.abs_img_path(thumb_source)) do |pic|
+    ImageScience.with_image(@archive.abs_img_path(thumb_source,'h')) do |pic|
       left=params[:x1].to_i
       top=params[:y1].to_i
       right=params[:x1].to_i+params[:width].to_i
       bottom=params[:y1].to_i+params[:height].to_i
       pic.with_crop(left,top,right,bottom) do |pic|
-        pic.resize(150,150) {|np| np.save(@archive.abs_img_path(big))}
-        pic.resize(96,96) {|sp| sp.save(@archive.abs_img_path(small))}
-        pic.resize(48,48) {|tp| tp.save(@archive.abs_img_path(tiny))}
+        pic.resize(150,150) {|np| np.save(@archive.abs_img_path(big,'h'))}
+        pic.resize(96,96) {|sp| sp.save(@archive.abs_img_path(small,'h'))}
+        pic.resize(48,48) {|tp| tp.save(@archive.abs_img_path(tiny,'h'))}
       end
     end
-    @archive.update_attribute('thumbnail',@archive.img_url_path(big))
+    @archive.update_attribute('thumbnail',@archive.img_url_path(big,'h'))
      respond_to do |wants|
        wants.html{ redirect_to admin_archive_path(@archive) }
      end

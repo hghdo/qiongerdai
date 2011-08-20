@@ -4,7 +4,7 @@ module Crawl
       [
         #
         {:name => 'FGBlog',
-         :enabled => false,
+         :enabled => true,
          :analyser => 'GeneralAnalyser',
          :entrances => [
             "http://blog.fashionguide.com.tw/",
@@ -24,7 +24,7 @@ module Crawl
         }, 
         # 
         { :name => 'rayliForum',
-          :enabled => false,
+          :enabled => true,
           :analyser => 'ForumAnalyser',
           :entrances => [
             "http://bbs.rayli.com.cn/forum-19-1.html",

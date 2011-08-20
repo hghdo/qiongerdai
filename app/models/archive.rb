@@ -1,4 +1,5 @@
 require 'zip/zipfilesystem'
+require 'devil'
 
 class Archive < ActiveRecord::Base
   belongs_to :provider
@@ -19,9 +20,6 @@ class Archive < ActiveRecord::Base
   LOCKED=3
   OK=4
   
-
-
-
   def content_dom
     return @dom if not @dom.blank?
     @dom=Nokogiri::HTML(self.content)
@@ -34,101 +32,81 @@ class Archive < ActiveRecord::Base
     end
     self.update_attribute('content',content_dom.to_html)
   end
-
-  # FIXME should generate differnet img size package
-  def to_zip
-    # generate mobile type html file
+  
+  # generate mobile type html file
+  # 
+  def write_mobile_html
     File.open(File.join(self.abs_img_dir,"#{self.id}.html"),"w") do |html|
       html.puts('<?xml version="1.0" encoding="UTF-8"?>')
       html.puts('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN" "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">')
       html.puts('<html><head>')
-      html.puts('<title></title>')
+      html.puts("<title>#{self.title}</title>")
       html.puts('<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">')
       html.puts('<style type="text/css">.autosize{max-width:100%;}</style>')
       html.puts('</head>')
       html.puts('<body>')
       html.puts('<div>')
       doc=Nokogiri::HTML(self.content)
-      doc.xpath("//img[@class='autosize']").each { |img| img["src"]=img["src"].sub(/\/images\/archives\/\d+\//,'') }
+      doc.xpath("//img[@class='autosize']").each { |img| img["src"]=img["src"].sub(/\/images\/archives\/\d+\/pics_[hml]\//,'') }
       html.puts(doc.to_html)
       html.puts('</div>')
       html.puts('</body></html>')
     end
+  end
+
+  # FIXME should generate differnet img size package
+  def to_zip
+    write_mobile_html
+    resize_imgs
+    pack 'h'
+    pack 'm'
+    pack 'l'
+  end
+  
+  def resize_imgs
+    FileUtils.mkdir(to_abs(File.join(root_url_dir,'pics_l')))
+    FileUtils.mkdir(to_abs(File.join(root_url_dir,'pics_m')))
+    Dir.foreach(self.abs_img_dir) do |img|
+      next if img.start_with?('.')
+      # resize img
+      if img.end_with? 'html'
+        FileUtils.cp(abs_img_path(img,'h'),abs_img_path(img,'m'))
+        FileUtils.cp(abs_img_path(img,'h'),abs_img_path(img,'l'))
+      else
+        di=Devil.with_image(abs_img_path(img,'h'))
+        m_q_img=di.dup.resize(*cal_new_size(di.width,di.height,480))
+        m_q_img.save(abs_img_path(img,'m'), :quality => 65 )
+        l_q_img=di.dup.resize(*cal_new_size(di.width,di.height,320))
+        l_q_img.save(abs_img_path(img,'l'), :quality => 65 )
+        # ImageScience.with_image(abs_img_path(img,'h')) do |is_pic|
+        #   if is_pic.width>480
+        #     new_height=(is_pic.height.to_f/is_pic.width) * 480
+        #     is_pic.resize(480,new_height){|np| np.save(abs_img_path(img,'m'))}
+        #   else
+        #     is_pic.save(abs_img_path(img,'m'))
+        #   end
+        #   if is_pic.width>320
+        #     new_height=(is_pic.height.to_f/is_pic.width) * 320
+        #     is_pic.resize(320,new_height){|np| np.save(abs_img_path(img,'l'))}
+        #   else
+        #     is_pic.save(abs_img_path(img,'l'))
+        #   end          
+        # end
+      end
+    end
+  end
+  
+  def pack(quality='h')
     # generate origin quality zip file 
-    zip_file=to_abs(zip_url_path('h'))
+    zip_file=to_abs(zip_url_path(quality))
     FileUtils.rm zip_file, :force => true
     Zip::ZipFile.open(zip_file,Zip::ZipFile::CREATE) do |zip|
       zip.dir.mkdir("#{self.id}")
-      Dir.foreach(self.abs_img_dir) do |img|
-        zip.add("#{self.id}/#{img}","#{self.abs_img_dir}/#{img}") unless img=~/^\./ 
-      end
-    end
-    
-    # generated middle quality zip file
-    clear_tmp
-    zip_file=to_abs(zip_url_path('m'))
-    FileUtils.rm zip_file, :force => true
-    Zip::ZipFile.open(zip_file,Zip::ZipFile::CREATE) do |zip|
-      zip.dir.mkdir("#{self.id}")
-      Dir.foreach(self.abs_img_dir) do |img|
+      Dir.foreach(self.abs_img_dir(quality)) do |img|
         next if img.start_with?('.')
-        # resize img
-        if img.end_with? 'html'
-          zip.add("#{self.id}/#{img}","#{self.abs_img_dir}/#{img}")
-        else
-          ImageScience.with_image("#{self.abs_img_dir}/#{img}") do |is_pic|
-            if is_pic.width>480
-              new_height=(is_pic.height.to_f/is_pic.width) * 480
-              is_pic.resize(480,new_height){|np| np.save("#{tmp_path}/#{img}")}
-            else
-              is_pic.save("#{tmp_path}/#{img}")
-            end
-          end
-          # add to zip file   
-          zip.add("#{self.id}/#{img}","#{tmp_path}/#{img}")
-        end
+        zip.add("#{self.id}/#{img}",abs_img_path(img,quality))
       end
-    end
-    
-    # generated low quality zip file
-    clear_tmp
-    zip_file=to_abs(zip_url_path('l'))
-    FileUtils.rm zip_file, :force => true
-    Zip::ZipFile.open(zip_file,Zip::ZipFile::CREATE) do |zip|
-      zip.dir.mkdir("#{self.id}")
-      Dir.foreach(self.abs_img_dir) do |img|
-        next if img.start_with?('.')
-        # resize img
-        if img.end_with? 'html'
-          zip.add("#{self.id}/#{img}","#{self.abs_img_dir}/#{img}")
-        else
-          ImageScience.with_image("#{self.abs_img_dir}/#{img}") do |is_pic|
-            if is_pic.width>320
-              new_height=(is_pic.height.to_f/is_pic.width) * 320
-              is_pic.resize(320,new_height){|np| np.save("#{tmp_path}/#{img}")}
-            else
-              is_pic.save("#{tmp_path}/#{img}")
-            end
-          end
-          # add to zip file   
-          zip.add("#{self.id}/#{img}","#{tmp_path}/#{img}")
-        end
-      end
-    end
-    FileUtils.rm_rf tmp_folder
-  end
-  
-  def package(quality='m')
-    
-  end
-  
-  def clear_tmp
-    FileUtils.rm_rf tmp_folder
-    FileUtils.mkdir_p tmp_folder
-  end
-  
-  def tmp_folder
-    @tmp||=File.join(Rails.root,"tmp/archive_#{self.id}")
+    end     
   end
 
   # deprecated
@@ -144,101 +122,55 @@ class Archive < ActiveRecord::Base
   #   self.content=ns.to_html 
   #   self.save
   # end
-
-  # deprecated this method has been already moved to crawl library.
-  def crawl_imgs()
-    puts "crawl images of #{self.title}"
-    thumbnail_url=nil
-    content_node_set=Nokogiri::HTML(self.content)
-    page_url=URI(self.url)
-    thumbnail_url=nil
-    imgs=content_node_set.xpath('.//img')
-    threads=[]
-    imgs.each do |pi|
-      # skip noisy images
-      #next if html_struct[:noisy_img_patterns].any? {|patt| pi['src']=~ patt}
-      threads<<Thread.new do
-        begin
-          #puts pi['src']
-          url=(page_url.merge(pi['src']))
-          Thread.exit if File.extname(url.path).downcase==".gif"
-          flattened_name=url.path.sub(/\//,'').gsub(/\//,'_') 
-          save_to=abs_img_path(flattened_name)
-          puts "Image file does not exist, crawl it."
-          http=Net::HTTP.new(url.host,url.port)
-          http.read_timeout=10
-          http.open_timeout=10
-          req=Net::HTTP::Get.new(url.path)
-          req.add_field 'HTTP_REFERER', self.url
-          res=http.request(req)
-          Thread.exit if res.class!=Net::HTTPOK
-          open(save_to, 'wb' ) { |file|
-            file.write(res.body)
-          }
-          # unless File.exists? iwp 
-          # end
-          #FileUtils.cp(iwp,abs_img_path(flattened_name))
-          img_url_in_archive=File.join(img_url_dir,flattened_name)
-          pi['src']=img_url_in_archive
-          pi['class']='autosize'
-          # remove image hardcode size attribute. 
-          %w{width height style onmouseover onclick}.each{|att| pi.remove_attribute att}
-          # FIXME Should create small size image as well. 
-          ImageScience.with_image(save_to){|thisimg| thumbnail_url=img_url_in_archive if thisimg.width>150} if thumbnail_url.blank?
-        rescue Exception => e
-          puts "Error occurred when crawl images => #{e}"
-          puts "Image url => #{url.to_s}"
-          puts e.backtrace
-          Thread.exit
-        end
-      end
-    end
-    threads.each {|thr| thr.value}
-    self.update_attributes({:content => content_node_set.to_html,:thumbnail => thumbnail_url,:status => ANALYZED})
-  end
   
+  def cal_new_size(width,height,max_width)
+    if width>max_width
+      new_height=(height.to_f/width) * max_width
+      return max_width,new_height
+    else
+      return width,height
+    end
+  end
 
-  def all_image_filenames
+  def all_image_filenames(quality='h')
     return @images unless @images.blank?
     @images=[]
-    Dir.foreach(self.abs_img_dir) do |file|
+    Dir.foreach(self.abs_img_dir(quality)) do |file|
       @images<<file unless file.start_with?('.') && file.end_with?('html')
     end
     @images
   end
 
-  def abs_img_path(img_name)
-    File.join(abs_img_dir,img_name)
+  def abs_img_path(img_name,quality='h')
+    File.join(abs_img_dir(quality),img_name)
   end
 
-  def img_url_path(img_name)
-    File.join(img_url_dir,img_name)
+  def img_url_path(img_name,quality='h')
+    File.join(img_url_dir(quality),img_name)
   end
 
   # dir part of the image url
-  def img_url_dir
-    return @ird unless @ird.blank?
-    @ird=File.join(self.root_url_dir,"pics")
+  def img_url_dir(quality='h')
+    File.join(self.root_url_dir,"pics_#{quality}")
   end
 
   # absolute path of the dir to save images of an archive
-  def abs_img_dir
-    return @aid unless @aid.blank?
-    @aid=File.join(Rails.public_path,img_url_dir)
-    FileUtils.mkdir_p(@aid) unless File.exists? @aid
-    @aid
+  def abs_img_dir(quality='h')
+    aid=File.join(Rails.public_path,img_url_dir(quality))
+    FileUtils.mkdir_p(aid) unless File.exists? aid
+    aid
   end
 
   # FIXME has different size of package
-  def zip_url_path(size="m")
-    File.join(self.root_url_dir,"#{self.id}_#{size}.zip")
+  def zip_url_path(quality="h")
+    File.join(self.root_url_dir,"#{self.id}_#{quality}.zip")
   end  
   
   def root_url_dir()
     return @srud unless @srud.blank?
     @srud=File.join("/images/archives",self.id.to_s)
-    FileUtils.mkdir_p(@srud) unless File.exists? @srud
-    @srud
+    # FileUtils.mkdir_p(@srud) unless File.exists? @srud
+    # @srud
   end
   
   def to_abs(path)

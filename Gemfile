@@ -7,28 +7,15 @@ gem 'rails', '3.0.9'
 
 gem 'mysql2', '< 0.3'
 
-#gem 'rmmseg-cpp'
 gem 'nokogiri', '1.4.4'
-#gem 'anemone', :git => 'http://github.com/hghdo/anemone.git'
-#gem 'robots', '0.10.0'
-#gem 'simple-rss'
+
 gem 'image_science'
 gem 'RubyInline'
 gem 'kaminari'
 gem 'jquery-rails','>1.0'
 gem 'rest-client'
 gem 'rubyzip'
-#gem 'acts-as-taggable-on'
-
-
-#gem 'acts_as_ferret'
-#gem 'rmmseg'
-
-#gem 'simple-rss'
-#gem 'rubyrss'
-
-# Use unicorn as the web server
-# gem 'unicorn'
+gem 'devil'
 
 # Deploy with Capistrano
 # gem 'capistrano'

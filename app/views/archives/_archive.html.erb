@@ -12,7 +12,7 @@
     </div>
   </div>
   <% unless archive.thumbnail.blank? %>
-  <img src="<%= archive.img_url_path(Archive::BIG_THUMB) %>" alt="" class="thumbnail"/>
+  <img src="<%= archive.img_url_path(Archive::BIG_THUMB,'h') %>" alt="" class="thumbnail"/>
   <% end %>
   <p style="clear:both;"></p>
 </div>

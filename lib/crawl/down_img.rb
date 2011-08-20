@@ -49,7 +49,7 @@ module Crawl
             url=(page_url.merge(pi['src']))
             next if File.extname(url.path).downcase==".gif"
             flattened_name=url.path.sub(/\//,'').gsub(/\//,'_') 
-            save_to=archive.abs_img_path(flattened_name)
+            save_to=archive.abs_img_path(flattened_name,'h')
             if File.exists? save_to
               puts "Image file already existed."
               next
@@ -61,7 +61,6 @@ module Crawl
             req.add_field 'HTTP_REFERER', archive.url
             res=http.request(req)
             next if res.class!=Net::HTTPOK
-            puts "DDDDDDDDDDDDDDDDDDDD => #{res.content_type}"
             # add extname if no ext name
             if File.extname(save_to).blank?
               ext=res.content_type.downcase.scan(/image\/(\w+)/)[0][0] rescue nil
@@ -72,13 +71,13 @@ module Crawl
               puts "NEW SAVE_TO => #{save_to}"
             end
             open(save_to, 'wb' ) { |file| file.write(res.body) }
-            img_url_in_archive=File.join(archive.img_url_dir,flattened_name)
+            img_url_in_archive=archive.img_url_path(flattened_name,'h')
             pi['src']=img_url_in_archive
             pi['class']='autosize'
             # remove image hardcode size attribute. 
             %w{width height style onmouseover onclick}.each{|att| pi.remove_attribute att}
             # FIXME Should create small size image as well. 
-            ImageScience.with_image(save_to){|thisimg| thumbnail_url=img_url_in_archive if thisimg.width>150} if thumbnail_url.blank?
+            ImageScience.with_image(save_to){|thisimg| thumbnail_url=img_url_in_archive if thisimg.width>250} if thumbnail_url.blank?
           rescue Timeout::Error
             retried_times+=1
             puts "Timeout crawl images => #{url.to_s}"
