@@ -61,6 +61,7 @@ class Archive < ActiveRecord::Base
     pack 'h'
     pack 'm'
     pack 'l'
+    FileUtils.chmod 0644, [to_abs(zip_url_path('h')),to_abs(zip_url_path('m')),to_abs(zip_url_path('l'))]
   end
   
   def resize_imgs
