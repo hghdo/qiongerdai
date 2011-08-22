@@ -65,8 +65,8 @@ class Archive < ActiveRecord::Base
   end
   
   def resize_imgs
-    FileUtils.mkdir(to_abs(File.join(root_url_dir,'pics_l')))
-    FileUtils.mkdir(to_abs(File.join(root_url_dir,'pics_m')))
+    FileUtils.mkdir_p(to_abs(File.join(root_url_dir,'pics_l')))
+    FileUtils.mkdir_p(to_abs(File.join(root_url_dir,'pics_m')))
     Dir.foreach(self.abs_img_dir) do |img|
       next if img.start_with?('.')
       # resize img
@@ -74,7 +74,7 @@ class Archive < ActiveRecord::Base
         FileUtils.cp(abs_img_path(img,'h'),abs_img_path(img,'m'))
         FileUtils.cp(abs_img_path(img,'h'),abs_img_path(img,'l'))
       else
-        di=Devil.with_image(abs_img_path(img,'h'))
+        di=Devil.with_image(abs_img_path(img,'h')) rescue next
         m_q_img=di.dup.resize(*cal_new_size(di.width,di.height,480))
         m_q_img.save(abs_img_path(img,'m'), :quality => 65 )
         l_q_img=di.dup.resize(*cal_new_size(di.width,di.height,320))
