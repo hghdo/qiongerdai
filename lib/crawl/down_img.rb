@@ -46,6 +46,10 @@ module Crawl
           #next if html_struct[:noisy_img_patterns].any? {|patt| pi['src']=~ patt}
           begin
             pi['src']=pi['file'] if pi['file']
+            pi['class']='fitscreen'
+            # remove image hardcode size attribute. 
+            # clear img width and e attribute
+            %w{width height style onmouseover onclick}.each{|att| pi.remove_attribute att}
             url=(page_url.merge(pi['src']))
             next if File.extname(url.path).downcase==".gif"
             flattened_name=url.path.sub(/\//,'').gsub(/\//,'_') 
@@ -74,9 +78,6 @@ module Crawl
             img_url_in_archive=archive.img_url_path(flattened_name,'h')
             pi['src']=img_url_in_archive
             pi['class']='autosize'
-            # remove image hardcode size attribute. 
-            %w{width height style onmouseover onclick}.each{|att| pi.remove_attribute att}
-            # FIXME Should create small size image as well. 
             ImageScience.with_image(save_to){|thisimg| thumbnail_url=img_url_in_archive if thisimg.width>250} if thumbnail_url.blank?
           rescue Timeout::Error
             retried_times+=1
