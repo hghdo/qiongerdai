@@ -65,6 +65,8 @@ class Archive < ActiveRecord::Base
   end
   
   def resize_imgs
+    FileUtils.rm_rf to_abs(File.join(root_url_dir,'pics_l'))
+    FileUtils.rm_rf to_abs(File.join(root_url_dir,'pics_m'))
     FileUtils.mkdir_p(to_abs(File.join(root_url_dir,'pics_l')))
     FileUtils.mkdir_p(to_abs(File.join(root_url_dir,'pics_m')))
     Dir.foreach(self.abs_img_dir) do |img|
