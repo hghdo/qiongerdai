@@ -48,6 +48,7 @@ class Archive < ActiveRecord::Base
       html.puts('</style>')
       html.puts('</head>')
       html.puts('<body>')
+      html.puts("<h2>#{self.title}</h2>")
       html.puts('<div>')
       doc=Nokogiri::HTML(self.content)
       doc.xpath("//img[@class='autosize']").each { |img| img["src"]=img["src"].sub(/\/images\/archives\/\d+\/pics_[hml]\//,'') }
