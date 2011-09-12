@@ -66,6 +66,7 @@ module Crawl
 
       doc.search("//a[@href]").each do |a|
         u = a['href']
+        puts "AAAAQAAAAAAAAAAAAAAAA" if u.end_with?("8403593.html")
         next if u.nil? or u.empty?
         abs = to_absolute(URI(u)) rescue next
         # if link_filter_patterns available then filter links

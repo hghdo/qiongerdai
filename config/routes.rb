@@ -1,5 +1,7 @@
 Qiongerdai::Application.routes.draw do
 
+  resources :comments
+
   resources :archives do
     get 'feed', :on => :collection
   end

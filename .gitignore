@@ -10,4 +10,4 @@ public/images/archives/
 public/archives/
 *.swp
 .redcar/
-
+.bundle

@@ -22,7 +22,7 @@ module Crawl
 
     def crawl
       # Fork some workers
-      3.times do
+      1.times do
         @workers << Thread.new{ Worker.new(@link_queue,@img_download_queue).run}
       end
 

@@ -1,4 +1,3 @@
-require 'rest_client'
 require 'zip/zipfilesystem'
 require 'crawl/down_img'
 

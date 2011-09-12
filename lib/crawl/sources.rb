@@ -4,7 +4,7 @@ module Crawl
       [
         #
         {:name => 'FGBlog',
-         :enabled => true,
+         :enabled => false,
          :analyser => 'GeneralAnalyser',
          :entrances => [
             "http://blog.fashionguide.com.tw/",
@@ -22,9 +22,29 @@ module Crawl
           :charset => 'big5',
           :max_age => 1, 
         }, 
+        #
+        {:name => 'YokaBlog',
+         :enabled => true,
+         :analyser => 'GeneralAnalyser',
+         :entrances => [
+            "http://blog.yoka.com/",
+            "http://blog.yoka.com/html/dpg/index.shtml",
+            "http://space.yoka.com/blog/ipage/star_article.php?type=0&page=1&page_size=50", # new blog file list
+            "http://blog.yoka.com/html/brand/index.shtml",
+            "http://blog.yoka.com/html/fashion/index.shtml"
+            ],
+          :archive_patterns => [/blog\.yoka\.com\/\d{3,7}\/\d{6,7}\.html/],
+          :unique_id_pattern => /(\d{6,7})\.html/,
+          :content_path_expression => "//div[@class='blogContent']/div[@class='blogCnr']",
+          :pub_date_xpath => "//div[@class='blogContent']/dl[@class='blogCtit']/dd/span", 
+          :pub_date_css => "div.blogContent>dl.blogCtit>dd>span", 
+          :pub_date_pattern => /(\d{4}.+)/,
+          :charset => 'utf-8',
+          :max_age => 3, 
+        }, 
         # 
         { :name => 'rayliForum',
-          :enabled => true,
+          :enabled => false,
           :analyser => 'ForumAnalyser',
           :entrances => [
             "http://bbs.rayli.com.cn/forum-19-1.html",
@@ -52,7 +72,7 @@ module Crawl
         }, 
         # 
         { :name => 'sinaForum',
-          :enabled => true,
+          :enabled => false,
           :analyser => 'ForumAnalyser',
           :entrances => [
             "http://club.eladies.sina.com.cn/forum-2-1.html",

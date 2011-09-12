@@ -28,12 +28,14 @@ require 'time'
       # next if Archive.exists?(:uid => uid)
       
       # Check title and Content. If title or content was nil then return
-      title=page.doc.at_css('title','TITLE').content
+      title=page.doc.at_css('title','TITLE').content rescue nil
+      return false,"title blank" if title.blank?
+      # puts "blog title => #{title}"
       content_node_set=fetch_content_nodes(page)
-      return false,"title blank" if title.blank? || content_node_set.size<1
+      return false,"can't find content nodes" if content_node_set.size<1
       # FIXME Check picture counts, ignore archives which has less than 5 pictures
       img_nodes=content_node_set.css('img')
-      return false,"No enough images#{img_nodes.size}" if img_nodes.size<3
+      return false,"No enough images=> #{img_nodes.size}" if img_nodes.size<3
       
       # Check archive publish time filter old archives
       pub_time=fetch_pub_time(page) 

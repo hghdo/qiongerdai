@@ -5,16 +5,15 @@ gem 'rails', '3.0.9'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'mysql2', '< 0.3'
 
-gem 'nokogiri', '1.4.4'
+gem 'nokogiri', '>1.4.4'
 
 gem 'image_science'
 gem 'RubyInline'
 gem 'kaminari'
 gem 'jquery-rails','>1.0'
-gem 'rest-client'
-gem 'rubyzip'
+# gem 'rest-client'
+# gem 'rubyzip'
 gem 'devil'
 
 # Deploy with Capistrano
@@ -38,5 +37,10 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'cucumber-rails'
   gem 'webrat'
-  gem 'capybara'
+  # gem 'capybara'
 end
+
+
+#group :production do
+  gem 'mysql2', '< 0.3'  
+#end
