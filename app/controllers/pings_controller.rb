@@ -1,5 +1,7 @@
 class PingsController < ApplicationController
-
+  
+  protect_from_forgery :except => :create
+  
   # GET /devices/1
   # GET /devices/1.xml
   def show

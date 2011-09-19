@@ -1,4 +1,6 @@
 class CommentsController < ApplicationController
+  protect_from_forgery :except => :create
+  
   # GET /comments
   # GET /comments.xml
   def index
