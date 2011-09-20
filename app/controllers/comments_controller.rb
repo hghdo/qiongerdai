@@ -46,11 +46,13 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       if @comment.save
-        format.html { redirect_to(@comment, :notice => 'Comment was successfully created.') }
-        format.xml  { render :xml => @comment, :status => :created, :location => @comment }
+        format.any { render :status => :created, :nothing => true  }
+        # format.html { redirect_to(@comment, :notice => 'Comment was successfully created.') }
+        # format.xml  { render :xml => @comment, :status => :created, :location => @comment }
       else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @comment.errors, :status => :unprocessable_entity }
+        format.any { render :status => :bad_request, :nothing => true  }
+        # format.html { render :action => "new" }
+        # format.xml  { render :xml => @comment.errors, :status => :unprocessable_entity }
       end
     end
   end
