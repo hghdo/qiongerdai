@@ -11,3 +11,4 @@ public/archives/
 *.swp
 .redcar/
 .bundle
+.DS_Store

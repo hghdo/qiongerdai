@@ -1,5 +1,7 @@
 Qiongerdai::Application.routes.draw do
 
+  namespace :admin do resources :releases end
+
   resources :comments
 
   resources :archives do
@@ -25,7 +27,8 @@ Qiongerdai::Application.routes.draw do
   # collect mobile devices ping data
   match 'ping' => 'pings#create'
   
-  match 'version' => 'versions#ga'
+  match 'version' => 'versions#last_build_number'
+  match 'dl/client' => 'versions#down_last_build'
 
 
   # The priority is based upon order of creation:
