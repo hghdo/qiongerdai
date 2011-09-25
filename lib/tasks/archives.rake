@@ -5,8 +5,8 @@ namespace :archives do
   desc "clean old archive images"
   task :clean => :environment  do
     Archive.where(["status=?",Archive::DELETED]).each do |arc|
-      archive_img_path=File.join(Rails.public,arc.root_url_dir)
-      FileUtils.rm_rf(archive_img_path, :force => true )
+      archive_img_path=File.join(Rails.public_path,arc.root_url_dir)
+      FileUtils.rm_rf(archive_img_path )
     end
     oks=Archive.where(["status=?",Archive::OK]).count
     next if oks<50
