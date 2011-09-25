@@ -19,6 +19,7 @@ class Archive < ActiveRecord::Base
   SYNCED=2
   LOCKED=3
   OK=4
+  OLD=5
   
   def content_dom
     return @dom if not @dom.blank?
