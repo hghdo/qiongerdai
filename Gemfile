@@ -15,6 +15,7 @@ gem 'jquery-rails','>1.0'
 # gem 'rest-client'
 # gem 'rubyzip'
 gem 'devil'
+gem 'carrierwave'
 
 # Deploy with Capistrano
 # gem 'capistrano'

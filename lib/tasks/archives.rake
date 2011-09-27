@@ -12,8 +12,8 @@ namespace :archives do
     next if oks<50
     Archive.where(["status=?",Archive::OK]).limit(oks-50).order("updated_at").each do |arc|
       # arc.update_attribute("status", Archive::OLD )
-      archive_img_path=File.join(Rails.public,arc.root_url_dir)
-      FileUtils.rm_rf(archive_img_path, :force => true )
+      archive_img_path=File.join(Rails.public_path,arc.root_url_dir)
+      FileUtils.rm_rf(archive_img_path)
     end
   end
   

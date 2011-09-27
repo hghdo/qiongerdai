@@ -1,0 +1,27 @@
+<h1>Listing admin_releases</h1>
+
+<table border="1">
+  <tr>
+    <th>pkg</th>
+    <th>version name</th>
+    <th>版本</th>
+    <th>文件名</th>
+	<th></th>
+  </tr>
+
+<% @apps.each do |app| %>
+  <tr>
+	<td><%= app.pkg_name %></td>
+	<td><%= app.version_name %></td>
+	<td><%= app.build %></td>
+	<td><%= app.app %></td>
+    <td><%= link_to 'Show', admin_client_app_path(app) %>&nbsp;
+    <%= link_to 'Edit', edit_admin_client_app_path(app) %>&nbsp;
+    <%= link_to 'Destroy', admin_client_app_path(app), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Release', new_admin_client_app_path %>

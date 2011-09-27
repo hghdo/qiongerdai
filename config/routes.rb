@@ -1,20 +1,14 @@
 Qiongerdai::Application.routes.draw do
 
-  namespace :admin do resources :releases end
-
   resources :comments
 
   resources :archives do
     get 'feed', :on => :collection
   end
 
-  resources :products
-  resources :things
-  resources :categories
-
   namespace :admin do
     match '/' => 'console#index',:as => :console
-    resources :things,:categories
+    resources :things,:categories,:client_apps
     resources :archives do
       get 'thumb', :on => :member
       put 'crop', :on => :member
@@ -23,12 +17,16 @@ Qiongerdai::Application.routes.draw do
       put 'unlock', :on => :member
     end
   end
+
+  resources :products
+  resources :things
+  resources :categories
   
   # collect mobile devices ping data
   match 'ping' => 'pings#create'
   
-  match 'version' => 'versions#last_build_number'
-  match 'dl/client' => 'versions#down_last_build'
+  match 'client/version' => 'versions#last_build_number'
+  match 'client/dl' => 'versions#down_last_build'
 
 
   # The priority is based upon order of creation:

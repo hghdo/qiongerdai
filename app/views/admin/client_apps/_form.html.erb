@@ -1,0 +1,21 @@
+<%= form_for([:admin,@client_app], :html => {:multipart => true}) do |f| %>
+  <% if @client_app.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@client_app.errors.count, "error") %> prohibited this admin_release from being saved:</h2>
+
+      <ul>
+      <% @client_app.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+	<p>select apk file:&nbsp;<%= f.file_field :app %></p>
+	<br/>
+	<p>Platform of client App:&nbsp;<%= f.text_field :platform, {:readonly => true} %></p>
+	<br/>
+    <%= f.submit %>
+  </div>
+<% end %>
