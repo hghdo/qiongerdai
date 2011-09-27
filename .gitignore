@@ -8,6 +8,7 @@ public/images/crawl/
 tmp
 public/images/archives/
 public/archives/
+public/dl/
 *.swp
 .redcar/
 .bundle
