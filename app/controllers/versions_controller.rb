@@ -9,12 +9,13 @@ class VersionsController < ApplicationController
   
   def down_last_build
     last_build=ClientApp.order('build desc').limit(1)[0]
-    Rails.logger.debug { "last url => http://#{request.host}:#{request.port}#{last_build.app.url}" }
+    # Rails.logger.debug { "last url => http://#{request.host}:#{request.port}#{last_build.app.url}" }
+    # Rails.logger.debug { "#{url_for(last_build.app.url, :only_path => false)}" }
     # try find the last build under public/releases/
     # File.join(Rails.public_path,"releases")
     respond_to do |format|
       format.any do
-        render :status => 302, :location => "http://#{request.host}:#{request.port}/dl/zaduiReader.apk", :nothing => true
+        render :status => 302, :location => "http://#{request.host}:#{request.port}#{last_build.app.url}", :nothing => true
       end
     end
     # redirect_to(url_for("http://#{request.host}:#{request.port}/releases/zaduiReader.apk"))
