@@ -55,6 +55,7 @@ class Archive < ActiveRecord::Base
       doc.xpath("//img[@class='autosize']").each { |img| img["src"]=img["src"].sub(/\/images\/archives\/\d+\/pics_[hml]\//,'') }
       html.puts(doc.to_html)
       html.puts('</div>')
+      html.puts("<p>原文链接: <a href='#{self.url}'>#{self.url.truncate(30)}</a></p>")
       html.puts('</body></html>')
     end
   end
