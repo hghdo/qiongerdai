@@ -44,15 +44,17 @@ require 'time'
       return false,"Archive too old #{pub_time}" if (pub_time+(@source[:max_age].days))<Time.now
       # Do some extra work if needed
       extra_work(content_node_set) if self.respond_to?(:extra_work)
+      page_content=content_node_set.inject(''){|c,i|c+=i.to_html(:encoding => 'utf-8')}
       # Get document META info
       desc_meta=page.doc.xpath("//meta[@name='description']")[0]
+      desc_text=desc_meta.blank? ? content_node_set.text.strip.truncate(100) : desc_meta['content']
       keywords_meta=page.doc.xpath("//meta[@name='keywords']")[0]
       analyzed_page={
         :title => title, :url => page.url.to_s, :uid => uid, 
         :pub_date => pub_time, 
-        :desc => desc_meta.blank? ? '' : desc_meta['content'],
+        :desc => desc_text,
         :keywords => keywords_meta.blank? ? '' : keywords_meta['content'],
-        :content => content_node_set.inject(''){|c,i|c+=i.to_html(:encoding => 'utf-8')} ,
+        :content => page_content,
       }  
       return true,analyzed_page
       #yield analyzed_page if block_given?

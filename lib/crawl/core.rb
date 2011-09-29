@@ -75,9 +75,9 @@ module Crawl
         #puts "HTTP-#{page.code}|| #{page.code.class}"
         next if page.code!=200
         # get real content of the archive
-        ok,remark,content_node_set=analyser.extract_content(page)
+        ok,arch=analyser.extract_content(page)
         if !ok
-          puts "analyse failed => #{remark}"
+          puts "analyse failed => #{arch}"
           next
         end
         # puts h[:title]
@@ -85,7 +85,7 @@ module Crawl
         # puts h[:uid]
         # puts h[:content]
         begin
-          archive=Archive.new(remark)
+          archive=Archive.new(arch)
           archive.save
           puts "Saved archive to DB"
           #@img_download_queue<<archive

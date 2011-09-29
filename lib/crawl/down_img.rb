@@ -83,7 +83,12 @@ module Crawl
             retried_times+=1
             puts "Timeout crawl images => #{url.to_s}"
             retry if retried_times<2
-            next            
+            next    
+          rescue Net::HTTPBadResponse, Errno::ECONNRESET,Errno::EPIPE => se
+            retried_times+=1
+            puts "Server ERROR => #{url.to_s} \n #{se.message}"
+            retry if retried_times<2
+            next                
           rescue Exception => e
             puts "Error! #{e.class} => #{e.message}"
             puts e.backtrace
