@@ -4,7 +4,7 @@ module Crawl
       [
         #
         {:name => 'FGBlog',
-         :enabled => false,
+         :enabled => true,
          :analyser => 'GeneralAnalyser',
          :entrances => [
             "http://blog.fashionguide.com.tw/",
@@ -42,7 +42,7 @@ module Crawl
         }, 
         #
         {:name => 'YokaBlog',
-         :enabled => false,
+         :enabled => true,
          :analyser => 'GeneralAnalyser',
          :entrances => [
             "http://blog.yoka.com/",
@@ -62,7 +62,7 @@ module Crawl
         }, 
         # 
         { :name => 'rayliForum',
-          :enabled => false,
+          :enabled => true,
           :analyser => 'ForumAnalyser',
           :entrances => [
             "http://bbs.rayli.com.cn/forum-19-1.html",
@@ -90,7 +90,7 @@ module Crawl
         }, 
         # 
         { :name => 'sinaForum',
-          :enabled => false,
+          :enabled => true,
           :analyser => 'ForumAnalyser',
           :entrances => [
             "http://club.eladies.sina.com.cn/forum-2-1.html",
