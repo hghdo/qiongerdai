@@ -21,7 +21,9 @@ require 'time'
     # Extract content from html, and save the content to db.
     def extract_content(page)
       # calculate archive unique id
-      uid=page.url.to_s.scan(@source[:unique_id_pattern])[0][0] rescue page.url.to_s
+      offset=@source[:unique_id_scan_result_offset]||0
+      uid=page.url.to_s.scan(@source[:unique_id_pattern])[0][offset] rescue page.url.to_s
+      puts "UUUUUUUUUUUUUUU=>#{uid}"
       uid=@source[:name]+"-"+uid
       # puts "UID is =>#{uid}"
       # FIXME Check whether this archive is already existed in db.
@@ -67,10 +69,10 @@ require 'time'
     end
     
     def fetch_pub_time(page)
-      #puts "pub date css => #{@source[:pub_date_css]}"
+      # puts "pub date css => #{@source[:pub_date_css]}"
       pub_date_node=page.doc.at_css(@source[:pub_date_css])
-      #puts "pub date note text =>#{pub_date_node.text}"
-      #puts "pub date string is => #{pub_date_node.content.scan(@source[:pub_date_pattern])[0][0]}"
+      # puts "pub date note text =>#{pub_date_node.text}"
+      # puts "pub date string is => #{pub_date_node.content.scan(@source[:pub_date_pattern])[0][0]}"
       Time.parse(pub_date_node.content.scan(@source[:pub_date_pattern])[0][0]) rescue nil
     end
 

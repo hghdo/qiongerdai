@@ -43,6 +43,7 @@ class Archive < ActiveRecord::Base
       html.puts('<html><head>')
       html.puts("<title>#{self.title}</title>")
       html.puts('<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">')
+      html.puts('<meta http-equiv="content-type" content="text/html; charset=UTF-8">')
       html.puts('<style type="text/css">')
       html.puts('.autosize{max-width:100%;}')
       html.puts('.fitscreen{max-width:100%;}')

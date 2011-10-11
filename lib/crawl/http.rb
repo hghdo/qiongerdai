@@ -112,6 +112,7 @@ module Crawl
           loc = url.merge(loc) if loc.relative?
 
           response, response_time = get_response(loc, referer)
+          # puts response.body
           code = Integer(response.code)
           redirect_to = response.is_a?(Net::HTTPRedirection) ?  URI(response['location']).normalize : nil
           yield response, code, loc, redirect_to, response_time
@@ -127,6 +128,7 @@ module Crawl
 
       opts = {}
       opts['User-Agent'] = user_agent if user_agent
+      # opts['User-Agent'] = "Firefox"
       opts['Referer'] = referer.to_s if referer
       #opts['Cookie'] = @cookie_store.to_s unless @cookie_store.empty? || (!accept_cookies? && @opts[:cookies].nil?)
 

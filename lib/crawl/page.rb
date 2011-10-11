@@ -1,4 +1,6 @@
 require 'nokogiri'
+require 'stringio'
+require 'zlib'
 module Crawl
   class Page
 
@@ -41,12 +43,20 @@ module Crawl
       @code = params[:code]
       @headers = params[:headers] || {}
       @headers['content-type'] ||= ['']
+      @headers['content-encoding'] ||= ['']
       @aliases = Array(params[:aka]).compact
       @referer = params[:referer]
       @depth = params[:depth] || 0
       @redirect_to = to_absolute(params[:redirect_to])
       @response_time = params[:response_time]
-      @body = params[:body]
+      if @headers['content-encoding'].first=='gzip'
+        sio = StringIO.new( params[:body] )
+        gz = Zlib::GzipReader.new( sio )
+        @body = gz.read()        
+        # puts @body
+      else
+        @body = params[:body]
+      end
       @error = params[:error]
       
       @charset=params[:charset]
@@ -66,7 +76,7 @@ module Crawl
 
       doc.search("//a[@href]").each do |a|
         u = a['href']
-        puts "AAAAQAAAAAAAAAAAAAAAA" if u.end_with?("8403593.html")
+        #puts "AAAAQAAAAAAAAAAAAAAAA" if u.end_with?("8403593.html")
         next if u.nil? or u.empty?
         abs = to_absolute(URI(u)) rescue next
         # if link_filter_patterns available then filter links
