@@ -11,10 +11,10 @@ class Device < ActiveRecord::Base
     self.average_using_frequency=new_record? ? recent_using_frequency : (totally_usage/days_since_installation)
   end  
   
-  private
   
   def days_since_installation
-    (Time.now-installed_at)/3600/24
+    d=(Time.now-installed_at)/3600/24
+    d>1 ? d : 1
   end
   
 end

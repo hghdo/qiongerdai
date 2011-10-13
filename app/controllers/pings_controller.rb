@@ -15,20 +15,22 @@ class PingsController < ApplicationController
 
   # FIXME Verify upload data format before call Model method 
   def create
+    # bellow is for ping version 2
     device=Device.find_by_uid(params[:uid])
-    device=Device.new({:installed_at=> Time.parse(params[:from]), :uid => params[:uid], }) if device.blank?
+    device=Device.new({:installed_at=> Time.parse(params[:from]), :uid => params[:uid], :install_date_str=>params[:from][0..7]}) if device.blank?
     device.usage_str=params[:usage]
+    device.debug=params[:app][:debug]
+    device.version=params[:app][:version_code]
+    device.os=params[:dev][:os][:name]
+    device.os_version=params[:dev][:os][:os_version]
+    device.device_name=params[:dev][:model]
     device.save
     HourPreferUsage.update_usage(params[:hour])    
+    
+    # if new ping version used add new code here
+    # 
     respond_to do |format|
       format.any { render :status => :created, :nothing => true  }
-      # if @device.save
-      #   format.html { redirect_to(@device, :notice => 'Device was successfully created.') }
-      #   format.xml  { render :xml => @device, :status => :created, :location => @device }
-      # else
-      #   format.html { render :action => "new" }
-      #   format.xml  { render :xml => @device.errors, :status => :unprocessable_entity }
-      # end
     end
   end
 end
