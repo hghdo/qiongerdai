@@ -22,7 +22,7 @@ class PingsController < ApplicationController
     device.debug=params[:app][:debug]
     device.version=params[:app][:version_code]
     device.os=params[:dev][:os][:name]
-    device.os_version=params[:dev][:os][:os_version]
+    device.os_version=params[:dev][:os][:sdk]
     device.device_name=params[:dev][:model]
     device.save
     HourPreferUsage.update_usage(params[:hour])    
