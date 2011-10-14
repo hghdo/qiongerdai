@@ -1,0 +1,11 @@
+<table border="1">
+  <tr>
+    <th>安装数量</th>
+    <th>日期</th>
+  </tr>    
+    <% for summary in @summaries %>
+      <tr><td><%= summary.num %></td><td><%= summary.inst_date %></td></tr>
+    <% end %>
+</table>
+
+  

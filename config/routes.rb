@@ -8,6 +8,7 @@ Qiongerdai::Application.routes.draw do
 
   namespace :admin do
     match '/' => 'console#index',:as => :console
+    match '/summary' => 'console#install_summary'
     resources :things,:categories,:client_apps
     resources :archives do
       get 'thumb', :on => :member
@@ -27,6 +28,7 @@ Qiongerdai::Application.routes.draw do
   
   match 'client/version' => 'versions#last_build_number'
   match 'client/dl' => 'versions#down_last_build'
+  # match 'summary' => 'console#install_summary', :module => "admin"
 
 
   # The priority is based upon order of creation:
