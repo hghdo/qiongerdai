@@ -12,6 +12,21 @@ class PingsController < ApplicationController
       format.xml  { render :xml => @device }
     end
   end
+  
+  def activate
+    device=Device.find_by_uid(params[:uid])
+    if device.blank?
+      device=Device.new({
+        :installed_at=> Time.parse(params[:installed_at]), 
+        :uid => params[:uid], 
+        :install_date_str=>params[:installed_at][0..7], 
+        :version => params[:build], })
+      device.save
+    end
+    respond_to do |format|
+      format.any { render :status => :created, :nothing => true  }
+    end
+  end
 
   # FIXME Verify upload data format before call Model method 
   def create

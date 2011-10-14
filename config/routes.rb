@@ -25,6 +25,7 @@ Qiongerdai::Application.routes.draw do
   
   # collect mobile devices ping data
   match 'ping' => 'pings#create'
+  match 'activate' => 'pings#activate'
   
   match 'client/version' => 'versions#last_build_number'
   match 'client/dl' => 'versions#down_last_build'
