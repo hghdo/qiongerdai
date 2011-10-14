@@ -1,7 +1,7 @@
 class Admin::ConsoleController < ApplicationController
   before_filter :authorized?, :except => :install_summary
   layout 'console', :except => :install_summary
-  layout 'application', :only => :install_summary
+  # layout 'application', :only => :install_summary
   
   def install_summary
     authenticate_or_request_with_http_basic do |login, password|
@@ -37,7 +37,7 @@ class Admin::ConsoleController < ApplicationController
   def authorized?
     return true if session[:admin]
     authenticate_or_request_with_http_basic do |login, password|
-      if(login=='admin' && password='1234')
+      if(login=='admin' && password='mimaofmeili')
         session[:admin]=true
         redirect_to admin_console_path
       else
@@ -51,7 +51,7 @@ class Admin::ConsoleController < ApplicationController
     return true if session[:admin]
     #authenticate_with_http_basic 
     authenticate_or_request_with_http_basic do |login, password|
-      if(login=='admin' && password='1234')
+      if(login=='admin' && password='mimaofmeili')
         session[:admin]=true
         redirect_to admin_console_path
       else
