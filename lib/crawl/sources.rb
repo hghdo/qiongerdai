@@ -28,17 +28,19 @@ module Crawl
          :analyser => 'GeneralAnalyser',
          :entrances => [
             "http://blog.vogue.com.cn/",
+            # "http://blog.vogue.com.cn/?267005/",
+            # "http://blog.vogue.com.cn/?266973/",
             ],
           :archive_patterns => [/blog\.vogue\.com\.cn\/\?\d{5,10}\/viewspace-\d{5,10}\.html$/,
-                                /blog\.vogue\.com\.cn\/\?uid-\d{6,10}-action-viewspace-itemid-\d{5,10}$/,],
+                                /blog\.vogue\.com\.cn\/\?uid-\d{5,10}-action-viewspace-itemid-\d{5,10}$/,],
           :unique_id_pattern => /viewspace-(itemid-)?(\d{5,10})/,
           :unique_id_scan_result_offset => 1,
           :content_path_expression => "//div[@id='xspace-showmessage']",
           :pub_date_xpath => "//div[@id='show']/p[@class='xspace-smalltxt']", 
           :pub_date_css => "div#show>p.xspace-smalltxt", 
           :pub_date_pattern => /(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})/,
-          :charset => 'gb2312',
-          :max_age => 1, 
+          :charset => 'gbk',
+          :max_age => 7, 
         }, 
         #
         {:name => 'YokaBlog',
@@ -113,15 +115,6 @@ module Crawl
           :min_hit => 100, 
           :min_reply => 10,
           }, 
-          
-          #
-          {
-            :name => 'yokaBlog',
-            :enabled => false, 
-            :analyser => 'GeneralAnalyser',
-            :entrances => ["http://blog.yoka.com/"], 
-
-          }
       ]
 
     end

@@ -86,8 +86,11 @@ module Crawl
         # puts h[:content]
         begin
           archive=Archive.new(arch)
-          archive.save
-          puts "Saved archive to DB"
+          if archive.save
+            puts "Saved archive to DB"
+          else
+            puts "Error when save archive, #{archive.errors.full_messages}"
+          end
           #@img_download_queue<<archive
         rescue Mysql2::Error => me
           puts me.message

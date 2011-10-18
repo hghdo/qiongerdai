@@ -32,7 +32,12 @@ class PingsController < ApplicationController
   def create
     # bellow is for ping version 2
     device=Device.find_by_uid(params[:uid])
-    device=Device.new({:installed_at=> Time.parse(params[:from]), :uid => params[:uid], :install_date_str=>params[:from][0..7]}) if device.blank?
+    if device.blank?
+      device=Device.new({:uid => params[:uid]})
+      installed_date=params[:installed_at]||params[:from]
+      device.installed_at=Time.parse(params[:installed_at]||params[:from])
+      device.install_date_str=installed_date[0..7]
+    end
     device.usage_str=params[:usage]
     device.debug=params[:app][:debug]
     device.version=params[:app][:version_code]
